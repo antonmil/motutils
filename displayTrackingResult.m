@@ -71,7 +71,7 @@ global clusternr
 % options.outFolder=sprintf('vis/clnr-%03d/s%d',clusternr,sceneInfo.scenario);
 % options.outFolder='vis/visoptim';
 % options.outFolder=outfolder;
-options.outFolder=sprintf('d:/acvt/projects/tracker-mot/data/tmp/s%04d',sceneInfo.scenario);
+% options.outFolder=sprintf('d:/acvt/projects/tracker-mot/data/tmp/s%04d',sceneInfo.scenario);
 % options.outFolder='d:\acvt\projects\tracker-mot\data\tmp\tld-s0025';
 % options.outFolder='d:\acvt\projects\tracker-mot\data\tmp\afl-acf-tld';
 % options.outFolder='d:\acvt\projects\tracker-mot\data\tmp\afl-acf-cs-dco\final\stitched';

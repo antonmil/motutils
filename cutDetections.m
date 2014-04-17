@@ -1,4 +1,4 @@
-function [detections nDets]=cutDetections(detections,nDets,sceneInfo, opt)
+function [detections nDets]=cutDetections(detections,nDets,sceneInfo, opt) 
 % remove all detections that are
 % outside the tracking area
 % 

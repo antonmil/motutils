@@ -366,6 +366,8 @@ pp = mkpp(breaks,coefs,dim);
 % % % end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+pp.bspline=pp2sp(pp);
+
 %--------------------------------------------------------------------------
 function [x,y,dim,breaks,n,periodic,beta,constr,weights,lad] = arguments(varargin)
 %ARGUMENTS Lengthy input checking
@@ -535,7 +537,7 @@ if x(1) < xlim1 || x(end) > xlim2
         y = y(:,isort);
     else
         mess = 'Some data points are outside the spline domain.';
-        warning('arguments:exteriordata',mess)
+%         warning('arguments:exteriordata',mess)
     end
 end
 

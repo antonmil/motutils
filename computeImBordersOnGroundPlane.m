@@ -1,4 +1,4 @@
-function computeImBordersOnGroundPlane(opt,sceneInfo,detections)
+function sceneInfo=computeImBordersOnGroundPlane(opt,sceneInfo,detections)
 	% compute image borders on ground plane
 
 	% determin detection that is highest in image as top border
