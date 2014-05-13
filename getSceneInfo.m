@@ -47,6 +47,9 @@ if scenario>500 && scenario<600
     return;
 end
 
+%% shift target center from foot position to center of BB?
+sceneInfo.yshift=0;
+
 
 sceneInfo.scenario=scenario;
 % dataset name
@@ -502,7 +505,7 @@ end
 % end
 
 fprintf('Detections file: %s\n',sceneInfo.detfile)
-assert(exist(sceneInfo.detfile,'file')==2,'detection file does not exist')
+assert(exist(sceneInfo.detfile,'file')==2,'detection file %s does not exist',sceneInfo.detfile)
 
 
 %% img Folder

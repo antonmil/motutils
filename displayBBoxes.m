@@ -83,8 +83,11 @@ for t=renderframes
     if (size(im,3)==1), im=repmat(im,[1 1 3]); end % greyscale
     
 %     im = flipdim(im,1);
-    imshow(im,'Border','tight')
-%     imagesc(im); axis image; set(gca,'XTick',[]);set(gca,'YTick',[]);
+%     imshow(im,'Border','tight');
+%     imshow(im,'parent',gca)
+        image(im);set(gcf,'Position',[0 100 sceneInfo.imgWidth sceneInfo.imgHeight]); set(gca, 'Position', [0 0 1 1]);
+        axis image; axis tight; set(gca,'XTick',[]);set(gca,'YTick',[])
+%     imagesc(im); axis image; axis tight; set(gca,'XTick',[]);set(gca,'YTick',[]);
 
 %     xlim([1 1920]);    ylim([1 1080]);
 %     set(gca,'YDir','reverse');

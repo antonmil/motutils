@@ -14,8 +14,13 @@ function mchist=getMCBoxHist(bbox,channels,nbins)
     ccnt=0;
     for c=channels
         ccnt=ccnt+1;
-        pix=bbox(:,:,c); pix=pix(:);
-        chist=hist(pix,nbins)/numel(pix);
+        pix=bbox(:,:,c); 
+%         pix=pix(:);
+%         chist=histc(pix,linspace(0,1,nb+1));
+%         chist=chist'./numel(pix);
+%         chist
+        [chist, x]=imhist(pix,nb);
+        chist=chist'./numel(pix);
         mchist(ccnt,:)=chist;
     end
 end
