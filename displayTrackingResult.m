@@ -33,7 +33,7 @@ options.framePause=0.1/sceneInfo.frameRate; % pause between frames
 options.detcol=[.1 .2 .9];
 
 
-options.traceLength=5; % overlay track from past n frames
+options.traceLength=0; % overlay track from past n frames
 options.predTraceLength=0; % overlay track from future n frames
 options.dotSize=0;
 options.boxLineWidth=2;
@@ -58,7 +58,7 @@ options.displayIDSwitches=0;
 options.displayFP=0;
 options.displayFN=0;
 options.displayMetrics=0;
-options.matchColorsToGT=1;
+options.matchColorsToGT=0;
 
 % sceneInfo.imgFileFormat(end-2:end)='png';
 % save?
