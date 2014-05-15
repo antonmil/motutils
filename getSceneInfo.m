@@ -47,6 +47,7 @@ if scenario>500 && scenario<600
     return;
 end
 
+sceneInfo.yshift=0;
 
 sceneInfo.scenario=scenario;
 % dataset name
@@ -81,6 +82,8 @@ switch(scenario)
         dataset='PRML';
     case intersect(scenario,401:409)
         dataset='AFL';
+    case intersect(scenario,500:599)
+        dataset='KITTI';
     otherwise
         error('unknown scenario');
 end
@@ -156,7 +159,10 @@ switch(scenario)
         seqname='prml-test';
     case 401
         seqname='afl4';
-        
+    case intersect(scenario,500:549);
+        seqname=sprintf('%04d',scenario-500);
+    case intersect(scenario,550:599);
+        seqname=sprintf('%04d',scenario-550);
     otherwise
         
         error('unknown scenario');
@@ -329,7 +335,7 @@ switch(scenario)
     case 401
         sceneInfo.frameNums=1:143;
     otherwise
-        warning('unknown scenario getFrameNums');
+        warning('unknown scenario getFrameNums. Will guess from imgFolder.');
 end
 
 %% frame rate
@@ -347,6 +353,8 @@ switch(scenario)
         sceneInfo.frameRate=30;
     case intersect(scenario,301:399)
         sceneInfo.frameRate=2;
+    case intersect(scenario,500:599) % KITTI
+        sceneInfo.frameRate=10;
 
 end
 %%
@@ -479,6 +487,10 @@ switch(scenario)
         sceneInfo.detfile=fullfile(homefolder,'diss','others','fayao','dataset_track','afl4','afl4_det.xml');
     case intersect(scenario,410:499)        
         sceneInfo.detfile=sprintf('d:/acvt/projects/tracker-mot/data/dets/s%04d-det.xml',scenario);
+    case intersect(scenario,500:549)
+        sceneInfo.detfile=fullfile(dbfolder,dataset,'tracking','training','det_02','LSVM',sprintf('%04d-cars.xml',500-scenario));
+    case intersect(scenario,550:599)
+        sceneInfo.detfile=fullfile(dbfolder,dataset,'tracking','training','det_02','LSVM',sprintf('%04d-cars.xml',550-scenario));
     otherwise
         sceneInfo.detfile=fullfile(detfolder,[seqname sprintf('-result-00000-%05d-nms.idl',length(sceneInfo.frameNums)-1)]);
 end
@@ -565,6 +577,10 @@ switch(scenario)
         sceneInfo.imgFolder=fullfile(homefolder,'prml','irtracking','data','img',filesep);
     case 401
         sceneInfo.imgFolder=fullfile(homefolder,'diss','others','fayao','dataset_track','afl4','imgs',filesep);
+    case intersect(scenario,500:549)
+        sceneInfo.imgFolder=fullfile(dbfolder,dataset,'tracking','training','image_02',seqname,filesep);
+    case intersect(scenario,550:599)
+        sceneInfo.imgFolder=fullfile(dbfolder,dataset,'tracking','testing','image_02',seqname,filesep);
     otherwise
         error('unknown scenario image Folder');
 end
@@ -578,6 +594,8 @@ switch(scenario)
     case {191,192,193,194,195,196,197,198,199}
         imgExt='.png';
     case intersect(scenario,401:409)
+        imgExt='.png';
+    case intersect(scenario,500:599) % KITTI
         imgExt='.png';
         
 end
@@ -604,6 +622,8 @@ switch(scenario)
         sceneInfo.imgFileFormat='frame_%05d';
     case intersect(scenario,401:409)
         sceneInfo.imgFileFormat='img%05d';
+    case intersect(scenario,500:599) % KITTI
+        sceneInfo.imgFileFormat='%06d';
 end
 
 % append file extension
@@ -719,6 +739,7 @@ if scenario==99, sceneInfo.targetSize=20; end
 if scenario>190 && scenario<199, sceneInfo.targetSize=20; end
 if scenario>300 && scenario<310, sceneInfo.targetSize=50; end
 if scenario>400 && scenario<410, sceneInfo.targetSize=10; end
+if scenario>=500 && scenario<600, sceneInfo.targetSize=50; end % KITTI Cars
 if opt.track3d, sceneInfo.targetSize=350; end
 if opt.track3d && ~isempty(intersect(scenario,301:399)), sceneInfo.targetSize=1500; end
 
@@ -739,6 +760,8 @@ switch(scenario)
         sceneInfo.targetAR=1;
     case intersect(scenario,401:409) % AFL
         sceneInfo.targetAR=1/2;
+    case intersect(scenario,500:599) % KITTI
+        sceneInfo=rmfield(sceneInfo,'targetAR');
 end
 
 
@@ -803,6 +826,8 @@ switch(scenario)
         sceneInfo.gtFile=fullfile(homefolder,'prml','irtracking','data','testanton-long_gt.xml');        
     case 401
         sceneInfo.gtFile=fullfile(homefolder,'diss','others','fayao','dataset_track','afl4','imgs','afl4_anno.mat');        
+    case intersect(scenario,500:549) % KITTI
+        sceneInfo.gtFile=fullfile(dbfolder,dataset,'tracking','training','label_02',[seqname '.xml']);
     otherwise
         warning('ground truth?');
 end

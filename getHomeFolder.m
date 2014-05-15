@@ -1,7 +1,7 @@
 function homedir=getHomeFolder()
 % home directory
 
-    homedir='/home/aanton';
+    homedir='/home/amilan';
     if ispc
         homedir='D:';
     end

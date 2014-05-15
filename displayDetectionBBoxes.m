@@ -7,6 +7,8 @@ function displayDetectionBBoxes(sceneInfo, detections, labeling)
 
 
 reopenFig('Detections')
+%     scrsz = get(0,'ScreenSize');
+%     set(gcf,'Position',[1 scrsz(4)/2 scrsz(3)/2 scrsz(4)/2])
 
 F=size(detections,2);
 assert(F==length(sceneInfo.frameNums), 'length of detections must be equal to the number of frames');
@@ -32,11 +34,12 @@ detections=setDetectionsIDs(detections,labeling);
 
         
 for t=1:F
-    clf    
+    clf       
+
     im=imread([sceneInfo.imgFolder sprintf(sceneInfo.imgFileFormat,sceneInfo.frameNums(t))]);
     if (size(im,3)==1), im=repmat(im,[1 1 3]); end % greyscale
 %     im=ones(sceneInfo.imgHeight, sceneInfo.imgWidth); %
-    imshow(im,'Border','tight')
+    imagesc(im)
     hold on
     
     % frame number
