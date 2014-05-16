@@ -42,10 +42,10 @@ if scenario>400 && scenario<500
     sceneInfo=getTrackerSceneInfo(scenario, opt);
     return;
 end
-if scenario>500 && scenario<600
-    sceneInfo=getDollarSceneInfo(scenario, opt);
-    return;
-end
+% if scenario>500 && scenario<600
+%     sceneInfo=getDollarSceneInfo(scenario, opt);
+%     return;
+% end
 
 %% shift target center from foot position to center of BB?
 sceneInfo.yshift=0;
@@ -490,9 +490,9 @@ switch(scenario)
     case intersect(scenario,410:499)        
         sceneInfo.detfile=sprintf('d:/acvt/projects/tracker-mot/data/dets/s%04d-det.xml',scenario);
     case intersect(scenario,500:549)
-        sceneInfo.detfile=fullfile(dbfolder,dataset,'tracking','training','det_02','LSVM',sprintf('%04d-cars.xml',500-scenario));
-    case intersect(scenario,550:599)
-        sceneInfo.detfile=fullfile(dbfolder,dataset,'tracking','training','det_02','LSVM',sprintf('%04d-cars.xml',550-scenario));
+        sceneInfo.detfile=fullfile(dbfolder,dataset,'tracking','training','det_02','LSVM',sprintf('%04d-cars.xml',scenario-500));
+    case intersect(scenario,550:599)        
+        sceneInfo.detfile=fullfile(dbfolder,dataset,'tracking','testing','det_02','LSVM',sprintf('%04d-cars.xml',scenario-550));
     otherwise
         sceneInfo.detfile=fullfile(detfolder,[seqname sprintf('-result-00000-%05d-nms.idl',length(sceneInfo.frameNums)-1)]);
 end
