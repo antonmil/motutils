@@ -637,6 +637,11 @@ if ~isfield(sceneInfo,'frameNums')
     sceneInfo.frameNums=1:length(imglisting);
 end
 
+%KITTI
+if ~isempty(intersect(scenario,500:599))
+    sceneInfo.frameNums=sceneInfo.frameNums-1;
+end 
+
 % image dimensions
 [sceneInfo.imgHeight, sceneInfo.imgWidth, ~]= ...
     size(imread([sceneInfo.imgFolder sprintf(sceneInfo.imgFileFormat,sceneInfo.frameNums(1))]));

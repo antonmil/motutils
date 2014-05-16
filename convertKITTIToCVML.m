@@ -53,6 +53,11 @@ F=length(dets);
                 
             else
                 conf=dets{t}(i).score;
+
+                if conf<0, continue; end
+                
+                sigA=0;    sigB=1;
+                conf=1./(1+exp(-sigB*conf + sigA*sigB));
                 objectNode.setAttribute('confidence',num2str(conf));
             end
             
