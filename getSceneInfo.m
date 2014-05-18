@@ -7,7 +7,6 @@ function sceneInfo=getSceneInfo(scenario, opt)
 %   frameNums       frame numbers (eg. frameNums=1:107)
 %   frameRate       frame rate of the video sequence (default: 25)
 %   imgFolder       image folder
-%   imgFileFormat   format for images (eg. frame_%04d.jpg)
 %   targetSize      approx. size of targets (default: 5 on image, 350 in 3d)
 %
 % Required for 3D Tracking only
@@ -22,6 +21,7 @@ function sceneInfo=getSceneInfo(scenario, opt)
 %   dataset         name of the dataset
 %   sequence        name of the sequence
 %   scenario        sequence number
+%   imgFileFormat   format for images (eg. frame_%04d.jpg)
 
 
 
@@ -589,8 +589,11 @@ end
 assert(exist(sceneInfo.imgFolder,'dir')==7,'%s imgfolder does not exist',sceneInfo.imgFolder)
 
 % image extension
-imgExt='.jpg';
+% imgExt='.jpg';
+imgExt='';
 switch(scenario)
+    case {23,25,27,70,71,72,80}
+        imgExt='.jpg';
     case {10,11,20,21,40,41,42,43,44,50,51,52,53,98}
         imgExt='.png';
     case {191,192,193,194,195,196,197,198,199}
@@ -598,11 +601,11 @@ switch(scenario)
     case intersect(scenario,401:409)
         imgExt='.png';
     case intersect(scenario,500:599) % KITTI
-        imgExt='.png';
-        
+        imgExt='.png';        
 end
-sceneInfo.imgFileFormat='frame_%04d';
 
+% sceneInfo.imgFileFormat='frame_%04d';
+sceneInfo.imgFileFormat='';
 switch(scenario)
     case 40
         sceneInfo.imgFileFormat='DaSide0811-seq6-%03d';
@@ -627,6 +630,9 @@ switch(scenario)
     case intersect(scenario,500:599) % KITTI
         sceneInfo.imgFileFormat='%06d';
 end
+if isempty(sceneInfo.imgFileFormat) || isempty(imgExt)
+    [sceneInfo.imgFileFormat, imgExt, sceneInfo.frameNums] = getImgFormat(sceneInfo.imgFolder, imgExt);
+end
 
 % append file extension
 sceneInfo.imgFileFormat=[sceneInfo.imgFileFormat imgExt];
@@ -637,10 +643,6 @@ if ~isfield(sceneInfo,'frameNums')
     sceneInfo.frameNums=1:length(imglisting);
 end
 
-%KITTI
-if ~isempty(intersect(scenario,500:599))
-    sceneInfo.frameNums=sceneInfo.frameNums-1;
-end 
 
 % image dimensions
 [sceneInfo.imgHeight, sceneInfo.imgWidth, ~]= ...
