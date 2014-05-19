@@ -630,7 +630,7 @@ switch(scenario)
     case intersect(scenario,500:599) % KITTI
         sceneInfo.imgFileFormat='%06d';
 end
-if isempty(sceneInfo.imgFileFormat) || isempty(imgExt)
+if isempty(sceneInfo.imgFileFormat) || isempty(imgExt) || ~isfield(sceneInfo,'frameNums')
     [sceneInfo.imgFileFormat, imgExt, sceneInfo.frameNums] = getImgFormat(sceneInfo.imgFolder, imgExt);
 end
 
