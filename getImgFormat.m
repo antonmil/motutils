@@ -28,6 +28,9 @@ if nargin<2 || isempty(ext)
     if domext==0, error('No images found in folder %s\n',folder); end    
 end
 
+if isequal(ext(1),'.')
+  ext=ext(2:end);
+end
 
 % now guess format    
 dirlisting=dir([folder,filesep,'*.' ext]);
