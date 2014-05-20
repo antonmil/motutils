@@ -12,7 +12,7 @@ detfile=sceneInfo.detfile;
 matfile=fullfile(pathstr,[filename '.mat']);
 if exist(matfile,'file')
     load(matfile,'detections')
-    detections=setDetectionPositions(detections,opt);
+    detections=setDetectionPositions(detections,opt,sceneInfo);
     
     % rescale confidense if necessary
     if scenario<190
@@ -404,7 +404,7 @@ function detections=projectToGP(detections,sceneInfo)
     end
 end
 
-function detections=setDetectionPositions(detections,opt)
+function detections=setDetectionPositions(detections,opt,sceneInfo)
 % set xp,yp to xi,yi if tracking is in image (2d)
 % set xp,yp to xw,yi if tracking is in world (3d)
 F=length(detections);
@@ -416,9 +416,11 @@ if opt.track3d
 else
     for t=1:F,  
         detections(t).xp=detections(t).xi;
-%         detections(t).yp=detections(t).yi;  
+        detections(t).yp=detections(t).yi;  
         % YSHIFT
-        detections(t).yp=detections(t).yi-detections(t).ht/2;        
+        if sceneInfo.yshift
+            detections(t).yp=detections(t).yi-detections(t).ht/2;        
+        end
     end
 end
 

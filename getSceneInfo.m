@@ -86,6 +86,8 @@ switch(scenario)
         dataset='AFL';
     case intersect(scenario,500:599)
         dataset='KITTI';
+    case intersect(scenario,600:620)
+        dataset='KITTI'; % 3d
     otherwise
         error('unknown scenario');
 end
@@ -165,6 +167,8 @@ switch(scenario)
         seqname=sprintf('%04d',scenario-500);
     case intersect(scenario,550:599);
         seqname=sprintf('%04d',scenario-550);
+    case intersect(scenario,600:620);
+        seqname=sprintf('%04d',scenario-600);
     otherwise
         
         error('unknown scenario');
@@ -490,9 +494,12 @@ switch(scenario)
     case intersect(scenario,410:499)        
         sceneInfo.detfile=sprintf('d:/acvt/projects/tracker-mot/data/dets/s%04d-det.xml',scenario);
     case intersect(scenario,500:549)
-        sceneInfo.detfile=fullfile(dbfolder,dataset,'tracking','training','det_02','LSVM',sprintf('%04d-cars.xml',scenario-500));
+        sceneInfo.detfile=fullfile(dbfolder,dataset,'tracking','training','det_02','LSVM',sprintf('%04d-cars.xml',scenario-500));        
+%         sceneInfo.detfile=fullfile(dbfolder,dataset,'tracking','training','det_02','Victor',sprintf('%04d.mat',scenario-500));
     case intersect(scenario,550:599)        
         sceneInfo.detfile=fullfile(dbfolder,dataset,'tracking','testing','det_02','LSVM',sprintf('%04d-cars.xml',scenario-550));
+    case intersect(scenario,600:620)
+        sceneInfo.detfile=fullfile(dbfolder,dataset,'tracking','training','det_02','Victor',sprintf('%04d.mat',scenario-600));
     otherwise
         sceneInfo.detfile=fullfile(detfolder,[seqname sprintf('-result-00000-%05d-nms.idl',length(sceneInfo.frameNums)-1)]);
 end
@@ -583,6 +590,8 @@ switch(scenario)
         sceneInfo.imgFolder=fullfile(dbfolder,dataset,'tracking','training','image_02',seqname,filesep);
     case intersect(scenario,550:599)
         sceneInfo.imgFolder=fullfile(dbfolder,dataset,'tracking','testing','image_02',seqname,filesep);
+    case intersect(scenario,600:620)
+        sceneInfo.imgFolder=fullfile(dbfolder,dataset,'tracking','training','image_02',seqname,filesep);
     otherwise
         error('unknown scenario image Folder');
 end
@@ -677,6 +686,8 @@ if opt.track3d
             sceneInfo.trackingArea=[-10000 10000 -500 120000];
         case intersect(scenario,301:399) % PRML
             sceneInfo.trackingArea=[0 8000 0 14000];
+        case intersect(scenario,600:620)
+            sceneInfo.trackingArea=[-294635.31920 289916.26502 -67404.71571 149313.36583];
         otherwise
             error('Definition of tracking area needed for 3d tracking');
     end
@@ -727,7 +738,7 @@ if opt.track3d
         case intersect(scenario,301:399)
             cameraconffile=fullfile(homefolder,'prml','irtracking','data','cam.xml');    
         otherwise
-            error('unknown scenario');
+            warning('Camera calibration not defined for 3d tracking');
     end
 end
 sceneInfo.camFile=cameraconffile;
@@ -752,6 +763,8 @@ if scenario>=500 && scenario<600, sceneInfo.targetSize=50; end % KITTI Cars
 if opt.track3d, sceneInfo.targetSize=350; end
 if opt.track3d && ~isempty(intersect(scenario,301:399)), sceneInfo.targetSize=1500; end
 
+if scenario>=600 && scenario<621, sceneInfo.targetSize=50; end % KITTI all victor
+
 %% target aspect ratio
 sceneInfo.targetAR=1/3;
 switch(scenario)
@@ -770,6 +783,8 @@ switch(scenario)
     case intersect(scenario,401:409) % AFL
         sceneInfo.targetAR=1/2;
     case intersect(scenario,500:599) % KITTI
+        sceneInfo=rmfield(sceneInfo,'targetAR');
+    case intersect(scenario,600:620) % KITTI Victor
         sceneInfo=rmfield(sceneInfo,'targetAR');
 end
 
@@ -837,6 +852,8 @@ switch(scenario)
         sceneInfo.gtFile=fullfile(homefolder,'diss','others','fayao','dataset_track','afl4','imgs','afl4_anno.mat');        
     case intersect(scenario,500:549) % KITTI
         sceneInfo.gtFile=fullfile(dbfolder,dataset,'tracking','training','label_02',[seqname '.xml']);
+    case intersect(scenario,600:620) % KITTI 3d
+        sceneInfo.gtFile=fullfile(dbfolder,dataset,'tracking','training','label_02','Victor',[seqname '.mat']);
     otherwise
         warning('ground truth?');
 end

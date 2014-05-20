@@ -23,12 +23,16 @@ F=length(dets);
     docNode = com.mathworks.xml.XMLUtils.createDocument('dataset');
     docRootNode = docNode.getDocumentElement;
     docRootNode.setAttribute('name','KITTI');
+    
+    
     for t=1:F
         if ~mod(t,10),fprintf('.'); end
         frameNode=docNode.createElement('frame');
         ndet=length(dets{t});
-        if ~ndet, continue; end
-        frameNode.setAttribute('number',num2str(dets{t}(1).frame));
+%         if ~ndet, continue; end
+      
+        % KITTI sequences start at 0
+        frameNode.setAttribute('number',num2str(t-1));
         objListNode=docNode.createElement('objectlist');
         
         

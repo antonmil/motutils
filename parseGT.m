@@ -56,6 +56,6 @@ gtInfo.H=gtInfo.H(:,notEmpty);
 
 
 % fprintf('all read\n');
-
+fprintf('\n');
 
 end

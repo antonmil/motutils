@@ -4,6 +4,7 @@ function stateInfo=getStateForEmptySolution(sceneInfo,opt)
 % zero metrics
 F=length(sceneInfo.frameNums);
 stateInfo.F=F;
+stateInfo.Xi=[];stateInfo.Yi=[];stateInfo.W=[];stateInfo.H=[];
 % stateInfo.Xi=[];stateInfo.Yi=[];
 % stateInfo.Xgp=[];stateInfo.Ygp=[];
 stateInfo.X=[];stateInfo.Y=[];

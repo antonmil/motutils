@@ -103,8 +103,8 @@ ff=sscanf(fname,[prefix counterstring suffix]);
 % last
 fname=strsplit(dirlisting(end).name,'.'); fname=char(fname{1});
 lf=sscanf(fname,[prefix counterstring suffix]);
-fprintf('sequence runs from frame %d to frame %d\n',ff,lf);
 frameNums=ff:lf;
+fprintf('sequence runs from frame %d to frame %d (%d frames)\n',ff,lf,length(frameNums));
 
 % finally, test for correctness
 for t=1:F
