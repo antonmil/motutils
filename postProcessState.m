@@ -6,7 +6,7 @@ global opt sceneInfo
 
 stInfo=stateInfo;
 if opt.cutToTA
-    stateInfo=cutStateToTrackingArea(stateInfo);
+    stateInfo=cutStateToTrackingArea(stateInfo,sceneInfo, opt);
 end
 
 % quick hack
