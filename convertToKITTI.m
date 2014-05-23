@@ -1,5 +1,6 @@
 function tracklets=convertToKITTI(stateInfo, class)
 
+tracklets=[];
 [F,N]=size(stateInfo.X);
 if nargin<2
     class='Car';

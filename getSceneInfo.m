@@ -27,6 +27,9 @@ function sceneInfo=getSceneInfo(scenario, opt)
 
 if nargin<2
     global opt
+    if ~isfield(opt,'track3d'); opt.track3d=0;end
+    if ~isfield(opt,'remOcc'); opt.remOcc=0;end
+         
 end
 % opt=getConOptions;
 % general folders
@@ -851,7 +854,7 @@ switch(scenario)
     case 401
         sceneInfo.gtFile=fullfile(homefolder,'diss','others','fayao','dataset_track','afl4','imgs','afl4_anno.mat');        
     case intersect(scenario,500:549) % KITTI
-        sceneInfo.gtFile=fullfile(dbfolder,dataset,'tracking','training','label_02',[seqname '.xml']);
+        sceneInfo.gtFile=fullfile(dbfolder,dataset,'tracking','training','label_02',[seqname '.mat']);
     case intersect(scenario,600:620) % KITTI 3d
         sceneInfo.gtFile=fullfile(dbfolder,dataset,'tracking','training','label_02','Victor',[seqname '.mat']);
     otherwise
