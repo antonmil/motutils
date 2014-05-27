@@ -2,6 +2,8 @@ function col=getColorFromID(id)
 	% get rgb [0,1] values from id
 % 
 
+    if id==0, col=zeros(1,3); return; end
+    
     colors=getIDColors;
     col=colors((mod(id,size(colors,1)))+1,:);
 end
