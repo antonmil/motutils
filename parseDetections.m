@@ -215,7 +215,7 @@ end
 detections=projectToGP(detections,sceneInfo);
 
 %% set xp and yp accordingly
-detections=setDetectionPositions(detections,opt);
+detections=setDetectionPositions(detections,opt,sceneInfo);
 
 
 % save detections in a .mat file
