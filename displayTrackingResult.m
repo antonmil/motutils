@@ -75,6 +75,7 @@ global clusternr
 % options.outFolder='d:\acvt\projects\tracker-mot\data\tmp\tld-s0025';
 % options.outFolder='d:\acvt\projects\tracker-mot\data\tmp\afl-acf-tld';
 % options.outFolder='d:\acvt\projects\tracker-mot\data\tmp\afl-acf-cs-dco\final\stitched';
+options.outFolder=sprintf('tmp/KITTI_PED/s%d',sceneInfo.scenario);
 if isfield(options,'outFolder') && ~exist(options.outFolder,'dir')
     mkdir(options.outFolder)
 end
