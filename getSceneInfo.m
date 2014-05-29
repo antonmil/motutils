@@ -516,9 +516,9 @@ switch(scenario)
     case intersect(scenario,600:620)
         sceneInfo.detfile=fullfile(dbfolder,dataset,'tracking','training','det_02','Victor',sprintf('%04d.mat',scenario-600));
     case intersect(scenario,800:849)
-        sceneInfo.detfile=fullfile(dbfolder,dataset,'tracking','training','det_02','LSVM',sprintf('%04d.xml',scenario-800));        
+        sceneInfo.detfile=fullfile(dbfolder,dataset,'tracking','training','det_02','LSVM',sprintf('%04d.mat',scenario-800));        
     case intersect(scenario,850:899)        
-        sceneInfo.detfile=fullfile(dbfolder,dataset,'tracking','testing','det_02','LSVM',sprintf('%04d.xml',scenario-850));
+        sceneInfo.detfile=fullfile(dbfolder,dataset,'tracking','testing','det_02','LSVM',sprintf('%04d.mat',scenario-850));
     otherwise
         sceneInfo.detfile=fullfile(detfolder,[seqname sprintf('-result-00000-%05d-nms.idl',length(sceneInfo.frameNums)-1)]);
 end
@@ -874,7 +874,7 @@ switch(scenario)
     case intersect(scenario,700:749) % KITTI Peds
         sceneInfo.gtFile=fullfile(dbfolder,dataset,'tracking','training','label_02',[seqname '-peds.mat']);
     case intersect(scenario,800:849) % KITTI Cars+Peds
-        sceneInfo.gtFile=fullfile(dbfolder,dataset,'tracking','training','label_02',[seqname '.xml']);
+        sceneInfo.gtFile=fullfile(dbfolder,dataset,'tracking','training','label_02',[seqname '.mat']);
     case intersect(scenario,600:620) % KITTI 3d
         sceneInfo.gtFile=fullfile(dbfolder,dataset,'tracking','training','label_02','Victor',[seqname '.mat']);
     otherwise
