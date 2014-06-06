@@ -21,7 +21,11 @@ for t=1:F
         wd=bboxes_tracked(t).bbox(:,3)'-bx;
         ht=bboxes_tracked(t).bbox(:,4)'-by;
         Xi(t,ids)=bx+wd/2;
-        Yi(t,ids)=by+ht;
+        if opt.track3d
+            Yi(t,ids)=by+ht/2;
+        else
+            Yi(t,ids)=by+ht;
+        end
         W(t,ids)=wd;
         H(t,ids)=ht;
     end
