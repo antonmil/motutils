@@ -24,7 +24,7 @@ minheight=15;
 [allsc goodones]=sort(allsc,'descend'); goodones=goodones(1:round(length(goodones)/(1/npercent*100))); 
 
 allxi=allxi(goodones);allyi=allyi(goodones);allsc=allsc(goodones);allht=allht(goodones);
-htobj=fit([allxi; allyi]',allht','poly21','Robust','on');
+htobj=fit([allxi; allyi]',allht','poly11','Robust','on');
 
 % %%
 % clf

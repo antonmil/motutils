@@ -389,12 +389,14 @@ switch(scenario)
     case 48
         sceneInfo.detfile=fullfile(dbfolder,dataset,seqname,'detections.mat');
     case 51
-        sceneInfo.detfile=fullfile(detfolder,'test-result-nms-0.8.idl');
-        sceneInfo.detfile=fullfile(detfolder,'pirsiavash.mat');
+        sceneInfo.detfile=fullfile(dbfolder,dataset,seqname,'seq01-annot.idl');
+%         sceneInfo.detfile=fullfile(detfolder,'pirsiavash.mat');
         sceneInfo.detfile=fullfile(homefolder,'diss/others/yangbo/ETH-Person/bahnhof_raw.avi.detection.mat');
+        sceneInfo.detfile=fullfile(homefolder,'storage/databases/ETH-Person/seq01/acfDet.xml');
     case 53
         sceneInfo.detfile=fullfile(dbfolder,dataset,seqname,'seq03-annot.idl');
         sceneInfo.detfile=fullfile(homefolder,'diss/others/yangbo/ETH-Person/sunnyday_raw.avi.detection.mat');
+        sceneInfo.detfile=fullfile(homefolder,'storage/databases/ETH-Person/seq03/acfDet.xml');
     case 62
         sceneInfo.detfile=fullfile(detfolder,['AVSS-' seqname sprintf('-result-00000-05059-nms.idl',length(sceneInfo.frameNums)-1)]);
     case {90,91,92}

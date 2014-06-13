@@ -10,7 +10,7 @@ function metricsKITTI=evalKITTI(resfile)
     pathToKittiDevkit='/home/amilan/storage/databases/KITTI/tracking/devkit_tracking/python';
     
     
-    allscen=700:720;
+    allscen=800:820;
     for scenario=allscen
         stateInfo=allInfo(scenario,6).stateInfo;
         cd(thiswd)

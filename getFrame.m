@@ -1,9 +1,9 @@
-function im=getFrame(sceneInfo,t)
+function [im, filename]=getFrame(sceneInfo,t)
 % load one specific frame
 
 im=[];
 
-filename=[sceneInfo.imgFolder sprintf(sceneInfo.imgFileFormat,sceneInfo.frameNums(t))];
+filename=getFrameFile(sceneInfo,t);
 if ~exist(filename,'file');
     warning('File %s does not exist!',filename);
 else
