@@ -3,7 +3,7 @@ function homedir=getHomeFolder()
 
     homedir='/home/amilan';
     if ispc
-        homedir='D:';
+        homedir='C:';
     end
     if exist('/gris/gris-f/home/aandriye','dir')
         homedir='/gris/gris-f/home/aandriye';

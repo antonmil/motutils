@@ -34,7 +34,7 @@ end
 % opt=getConOptions;
 % general folders
 homefolder=getHomeFolder;
-dbfolder=fullfile(homefolder,filesep,'storage','databases'); if ispc, dbfolder=fullfile('D:','storage','databases'); end
+dbfolder=fullfile(homefolder,filesep,'storage','databases'); if ispc, dbfolder=fullfile('C:','storage','databases'); end
 % if exist('/gris','dir'), dbfolder=fullfile(filesep,'gris','takatuka_dbases'); end
 if exist('/gris','dir'), dbfolder=fullfile(filesep,'gris','gris-f','home','aandriye','storage'); end
 
