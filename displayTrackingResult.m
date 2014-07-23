@@ -8,15 +8,6 @@ function displayTrackingResult(sceneInfo, stateInfo, rframes)
 
 % [~, ~, ~, ~, X Y]=getStateInfo(stateInfo);
 
-% remove large and small boxes
-if sceneInfo.scenario==41
-    large=find(stateInfo.H>220);
-    small=find(stateInfo.H<130);
-    stateInfo.Xi(large)=0;stateInfo.Yi(large)=0;stateInfo.W(large)=0;stateInfo.H(large)=0;
-    stateInfo.Xi(small)=0;stateInfo.Yi(small)=0;stateInfo.W(small)=0;stateInfo.H(small)=0;
-end
-
-
 [stateInfo.X, stateInfo.Y, stateInfo]= ...
     cleanState(stateInfo.Xi, stateInfo.Yi,stateInfo);
 W=stateInfo.W;
