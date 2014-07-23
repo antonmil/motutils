@@ -89,6 +89,8 @@ switch(scenario)
         dataset='AFL';
     case intersect(scenario,500:899)
         dataset='KITTI';
+    case intersect(scenario,901:917)
+        dataset='UrbanStreet';
     otherwise
         error('unknown scenario');
 end
@@ -178,6 +180,8 @@ switch(scenario)
         seqname=sprintf('%04d',scenario-800);
     case intersect(scenario,850:899);
         seqname=sprintf('%04d',scenario-850);
+    case intersect(scenario,900:917);
+        seqname=sprintf('sequence%02d',scenario-900);
     otherwise
         
         error('unknown scenario');
@@ -392,19 +396,19 @@ switch(scenario)
         sceneInfo.detfile=fullfile(dbfolder,dataset,seqname,'seq01-annot.idl');
 %         sceneInfo.detfile=fullfile(detfolder,'pirsiavash.mat');
         sceneInfo.detfile=fullfile(homefolder,'diss/others/yangbo/ETH-Person/bahnhof_raw.avi.detection.mat');
-        sceneInfo.detfile=fullfile(homefolder,'storage/databases/ETH-Person/seq01/acfDet.xml');
+        sceneInfo.detfile=fullfile(homefolder,'storage/databases/ETH-Person/seq01/acfDetInria.xml');
     case 53
         sceneInfo.detfile=fullfile(dbfolder,dataset,seqname,'seq03-annot.idl');
         sceneInfo.detfile=fullfile(homefolder,'diss/others/yangbo/ETH-Person/sunnyday_raw.avi.detection.mat');
-        sceneInfo.detfile=fullfile(homefolder,'storage/databases/ETH-Person/seq03/acfDet.xml');
+        sceneInfo.detfile=fullfile(homefolder,'storage/databases/ETH-Person/seq03/acfDetInria.xml');
     case 62
         sceneInfo.detfile=fullfile(detfolder,['AVSS-' seqname sprintf('-result-00000-05059-nms.idl',length(sceneInfo.frameNums)-1)]);
     case {90,91,92}
         sceneInfo.detfile=fullfile(detfolder,'detections.mat');
     case 41
 %         sceneInfo.detfile=fullfile(homefolder,'diss/others/siyu/TUD/tud-crossing-detection.idl');
-%         sceneInfo.detfile=fullfile(homefolder,'diss/others/siyu/TUD/tud-crossing-single.idl');
-        sceneInfo.detfile=fullfile(homefolder,'diss/others/siyu/TUD/tud-single.idl');
+        sceneInfo.detfile=fullfile(homefolder,'diss/others/siyu/TUD/tud-crossing-single.idl');
+%         sceneInfo.detfile=fullfile(homefolder,'diss/others/siyu/TUD/tud-single.idl');
 %         sceneInfo.detfile=fullfile(homefolder,'diss/others/siyu/data040913/resultsOnPaper/tud-crossing-single.idl'); 
 %     case 42
 %         sceneInfo.detfile='/home/aanton/visinf/projects/ongoing/vancura-bsc/Source/Detektor/Results/TUD/tud-stadtmitte/UpperBodyDetector_TUD-result-00000-00178-nms.idl'
@@ -521,6 +525,8 @@ switch(scenario)
         sceneInfo.detfile=fullfile(dbfolder,dataset,'tracking','training','det_02','LSVM',sprintf('%04d.mat',scenario-800));        
     case intersect(scenario,850:899)        
         sceneInfo.detfile=fullfile(dbfolder,dataset,'tracking','testing','det_02','LSVM',sprintf('%04d.mat',scenario-850));
+    case intersect(scenario,900:917)
+        sceneInfo.detfile=fullfile(dbfolder,dataset,'Dets',sprintf('acfDet-%02d.xml',scenario-900));
     otherwise
         sceneInfo.detfile=fullfile(detfolder,[seqname sprintf('-result-00000-%05d-nms.idl',length(sceneInfo.frameNums)-1)]);
 end
@@ -611,6 +617,8 @@ switch(scenario)
         sceneInfo.imgFolder=fullfile(dbfolder,dataset,'tracking','training','image_02',seqname,filesep);
     case intersect(scenario,[550:599 750:799 850:899])
         sceneInfo.imgFolder=fullfile(dbfolder,dataset,'tracking','testing','image_02',seqname,filesep);
+    case intersect(scenario,900:917)
+        sceneInfo.imgFolder=fullfile(dbfolder,dataset,'Data',seqname,'images_left',filesep);
     otherwise
         error('unknown scenario image Folder');
 end
@@ -717,7 +725,7 @@ end
 
 %% camera
 cameraconffile=[];
-if opt.track3d
+% if opt.track3d
     cam=1;
     switch(scenario)
         case {20,21} %terrace
@@ -759,7 +767,7 @@ if opt.track3d
         otherwise
             warning('Camera calibration not defined for 3d tracking');
     end
-end
+% end
 sceneInfo.camFile=cameraconffile;
 
 if ~isempty(sceneInfo.camFile)

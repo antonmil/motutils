@@ -1,5 +1,5 @@
 function htobj=estimateTargetsSize(sceneInfo)
-% Take best n percent of detections
+% Take best n percent of alldets
 % and fit a 2d surface through their heights
 
 
@@ -8,15 +8,16 @@ npercent = 25; % best 25 %
 % scenario=41;
 
 % sceneInfo=getSceneInfo(scenario);
-detections=parseDetections(sceneInfo);
+alldets=parseDetections(sceneInfo);
+
 allxi=[];allxi=[];allyi=[];allsc=[];allht=[];
 
-F=length(detections);
+F=length(alldets);
 for t=1:F
-    allxi=[allxi detections(t).xi];
-    allyi=[allyi detections(t).yi];
-    allsc=[allsc detections(t).sc];
-    allht=[allht detections(t).ht];
+    allxi=[allxi alldets(t).xi];
+    allyi=[allyi alldets(t).yi];
+    allsc=[allsc alldets(t).sc];
+    allht=[allht alldets(t).ht];
 end
 minheight=15;
 %  goodones=find(allsc>0.75); % confident ones

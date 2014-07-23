@@ -15,7 +15,7 @@ assert(F==length(sceneInfo.frameNums), 'length of detections must be equal to th
 
 detcol=[.1 .2 .9];
 grey=.6*ones(1,3);
-framePause=0.001; % pause between frames
+framePause=0.1; % pause between frames
 % framePause=1;
 
 traceLength=0; % overlay data from past n frames
@@ -109,7 +109,7 @@ for t=1:F
     end
 %     saveas(gcf,sprintf('../../data/tmp/dets-%s-final-%04d.jpg',sceneInfo.sequence,t));
 %     gd=getframe(gcf);
-%     imwrite(gd.cdata,sprintf('tmp/dets4/dets-%s-%04d.png',sceneInfo.sequence,t));
+%     imwrite(gd.cdata,sprintf('tmp/dets/dets-%s-%04d.png',sceneInfo.sequence,t));
     pause(framePause)
 end
 

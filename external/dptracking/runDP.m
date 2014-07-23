@@ -128,9 +128,9 @@ toc
 fnum = max(dres.fr);
 bboxes_tracked = dres2bboxes(dres_dp, fnum);  %% we are visualizing the "DP with NMS in the lop" results. Can be changed to show the results of DP or push relabel algorithm.
 % quick hack
-if scenario==72
-    bboxes_tracked(201).bbox=[];
-end
+% if scenario==72
+%     bboxes_tracked(201).bbox=[];
+% end
 %% pad rest
 if length(bboxes_tracked)<length(frames)
     for pp=length(bboxes_tracked)+1:length(frames)

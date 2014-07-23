@@ -14,7 +14,7 @@ if sceneInfo.gtAvailable
     gtInfo.frameNums=gtInfo.frameNums(frkeep);
     gtInfo.X=gtInfo.X(frkeep,:);gtInfo.Y=gtInfo.Y(frkeep,:);
     gtInfo.W=gtInfo.W(frkeep,:);gtInfo.H=gtInfo.H(frkeep,:);
-    if opt.track3d
+    if isfield(gtInfo,'Xgp')
         gtInfo.Xgp=gtInfo.Xgp(frkeep,:);gtInfo.Ygp=gtInfo.Ygp(frkeep,:);
     end
     gtInfo.Xi=gtInfo.Xi(frkeep,:);gtInfo.Yi=gtInfo.Yi(frkeep,:);

@@ -10,7 +10,7 @@ if isempty(h)
 else
     figure(h);
 end
-pause(.1);
+pause(.01);
 
 
 end
