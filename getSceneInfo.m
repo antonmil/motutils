@@ -752,8 +752,8 @@ cameraconffile=[];
             cameraconffile=fullfile(dbfolder,dataset,'tud-stadtmitte-calib.xml');
         case {45,46,47}
             cameraconffile=sprintf('%sETH-Central/pedxing-seq1-calib.xml',dbfolder);
-        case 51
-            cameraconffile=sprintf('%s/ETH-Person/seq01/left/calib/camPar.mat',dbfolder);
+%         case 51
+%             cameraconffile=sprintf('%s/ETH-Person/seq01/left/calib/camPar.mat',dbfolder);
         case {60,61,62}
             cameraconffile=sprintf('%sAVSS/AB_calib.xml',dbfolder);
         case intersect(scenario,101:126)
