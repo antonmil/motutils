@@ -24,7 +24,7 @@ options.framePause=0.1/sceneInfo.frameRate; % pause between frames
 options.detcol=[.1 .2 .9];
 
 
-options.traceLength=0; % overlay track from past n frames
+options.traceLength=5; % overlay track from past n frames
 options.predTraceLength=0; % overlay track from future n frames
 options.dotSize=0;
 options.boxLineWidth=2;
@@ -45,10 +45,10 @@ options.displayBoxes=1;
 options.displayID=1;
 options.displayCropouts=0;
 options.displayConnections=0;
-options.displayIDSwitches=0;
-options.displayFP=0;
-options.displayFN=0;
-options.displayMetrics=0;
+options.displayIDSwitches=1;
+options.displayFP=1;
+options.displayFN=1;
+options.displayMetrics=1;
 options.matchColorsToGT=0;
 
 % sceneInfo.imgFileFormat(end-2:end)='png';
@@ -60,7 +60,7 @@ global clusternr
 % options.outFolder=sprintf('tmp/IJVC/s%d',clusternr,sceneInfo.scenario);
 % options.outFolder=sprintf('tmp/iccv13/single/s%d',sceneInfo.scenario);
 % options.outFolder=sprintf('vis/clnr-%03d/s%d',clusternr,sceneInfo.scenario);
-% options.outFolder='vis/visoptim';
+options.outFolder='tmp/vis';
 % options.outFolder=outfolder;
 % options.outFolder=sprintf('d:/acvt/projects/tracker-mot/data/tmp/s%04d',sceneInfo.scenario);
 % options.outFolder='d:\acvt\projects\tracker-mot\data\tmp\tld-s0025';

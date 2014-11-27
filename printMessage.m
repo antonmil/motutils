@@ -4,6 +4,7 @@ function printMessage(L,F,varargin)
 
 global opt
 
+if ~isfield(opt,'verbosity'), opt.verbosity=3; end
 
 if L<=opt.verbosity
     fprintf(F,varargin{:});

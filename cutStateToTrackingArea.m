@@ -12,6 +12,8 @@ Y(X==0)=0; X(Y==0)=0;
 
 if isfield(stateInfo,'Xi')
     stateInfo.Xi(X==0)=0; stateInfo.Yi(Y==0)=0;
+end
+if isfield(stateInfo,'W')
     stateInfo.W(X==0)=0; stateInfo.H(Y==0)=0;
 end
 

@@ -21,6 +21,7 @@ framePause=0.1; % pause between frames
 traceLength=0; % overlay data from past n frames
 dotSize=10;
 boxLineWidth=3;
+showBoxNumber=1; %
 
 
 if nargin<3
@@ -32,7 +33,7 @@ end
 
 detections=setDetectionsIDs(detections,labeling);
 
-        
+bxcnt=0;        
 for t=1:F
     clf       
 
@@ -40,6 +41,8 @@ for t=1:F
     if (size(im,3)==1), im=repmat(im,[1 1 3]); end % greyscale
 %     im=ones(sceneInfo.imgHeight, sceneInfo.imgWidth); %
     imagesc(im)
+    set(gca,'XTick',[]);  set(gca,'YTick',[]);
+    set(gca,'position',[0 0 1 1],'units','normalized')
     hold on
     
     % frame number
@@ -66,6 +69,11 @@ for t=1:F
         end
         detcol(:)=1;
         line([bleft bleft bright bright bleft],[btop bbottom bbottom btop btop],'color',detcol,'linewidth',boxLineWidth*max(0.1,detections(t).sc(id)));
+        
+        bxcnt=bxcnt+1;
+        if showBoxNumber
+            text(bleft,btop,num2str(id),'color','r','FontSize',12,'FontWeight','bold');
+        end
     end
     
     % show trace
@@ -108,8 +116,8 @@ for t=1:F
 
     end
 %     saveas(gcf,sprintf('../../data/tmp/dets-%s-final-%04d.jpg',sceneInfo.sequence,t));
-%     gd=getframe(gcf);
-%     imwrite(gd.cdata,sprintf('tmp/dets/dets-%s-%04d.png',sceneInfo.sequence,t));
+    gd=getframe(gcf);
+    imwrite(gd.cdata,sprintf('tmp/dets/dets-%s-%04d.jpg',sceneInfo.sequence,t));
     pause(framePause)
 end
 

@@ -563,7 +563,7 @@ for t=renderframes
         if t==1
             pause(.1);
         end
-        outfile=sprintf('frame_%04d.%s',frameNums(t),ext);
+        outfile=sprintf('s%d-f%04d.%s',sceneInfo.scenario,frameNums(t),ext);
 %         if isfield(options,'renderframes')
 %             outfile=sprintf('s%d-%d.%s',sceneInfo.scenario,tcnt,ext);
 %         end

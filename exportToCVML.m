@@ -28,9 +28,9 @@ for t=1:F
     exobj=find(stateInfo.W(t,:));
     for id=exobj
         objectNode=docNode.createElement('object');
-%         objectNode.setAttribute('id',num2str(id));            
+        objectNode.setAttribute('id',num2str(id));            
 %         objectNode.setAttribute('confidence',num2str(1));
-        objectNode.setAttribute('confidence',num2str(stateInfo.S(t,id)));
+%         objectNode.setAttribute('confidence',num2str(stateInfo.S(t,id)));
         
         boxNode=docNode.createElement('box');
         

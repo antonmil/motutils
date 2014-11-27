@@ -2,7 +2,7 @@ function sceneInfo=computeImBordersOnGroundPlane(opt,sceneInfo,detections)
     % compute image borders on ground plane
 
     % determine detection that is highest in image as top border
-    imtoplimit=min([detections(:).xi]);
+    imtoplimit=min([detections(:).yi]);
 
     % for 2D tracking, image border = 'ground plane'
     if ~opt.track3d
