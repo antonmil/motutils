@@ -34,7 +34,7 @@ end
 % opt=getConOptions;
 % general folders
 homefolder=getHomeFolder;
-dbfolder=fullfile(homefolder,filesep,'storage','databases'); if ispc, dbfolder=fullfile('C:','storage','databases'); end
+dbfolder=fullfile(homefolder,filesep,'storage','databases'); if ispc, dbfolder=fullfile('D:','storage','databases'); end
 % if exist('/gris','dir'), dbfolder=fullfile(filesep,'gris','takatuka_dbases'); end
 if exist('/gris','dir'), dbfolder=fullfile(filesep,'gris','gris-f','home','aandriye','storage'); end
 
@@ -850,7 +850,7 @@ switch(scenario)
     case 51
         sceneInfo.gtFile=fullfile(homefolder,'/diss/others/yangbo/ETH-Person/bahnhof_raw.avi.gt.mat');
     case 53
-        sceneInfo.gtFile=fullfile(homefolder,'/diss/others/yangbo/ETH-Person/sunnyday_raw.avi.tracking.gt.mat');
+        sceneInfo.gtFile=fullfile(dbfolder,'/others/yangbo/ETH-Person/sunnyday_raw.avi.tracking.gt.mat');
     case {50,51,52,53} % ETH-Person
         sceneInfo.gtFile=fullfile(dbfolder,dataset,seqname,'GT2d_assc.mat');        
     case 62
