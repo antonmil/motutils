@@ -89,6 +89,8 @@ switch(scenario)
         dataset='AFL';
     case intersect(scenario,500:899)
         dataset='KITTI';
+    case intersect(scenario,1500:1899)
+        dataset='KITTI';
     case intersect(scenario,901:917)
         dataset='UrbanStreet';
     otherwise
@@ -182,6 +184,21 @@ switch(scenario)
         seqname=sprintf('%04d',scenario-850);
     case intersect(scenario,900:917);
         seqname=sprintf('sequence%02d',scenario-900);
+        
+    case intersect(scenario,1500:1549);
+        seqname=sprintf('%04d',scenario-1500);
+    case intersect(scenario,1550:1599);
+        seqname=sprintf('%04d',scenario-1550);
+    case intersect(scenario,1700:1749);
+        seqname=sprintf('%04d',scenario-1700);
+    case intersect(scenario,1750:1799);
+        seqname=sprintf('%04d',scenario-1750);
+    case intersect(scenario,1800:1849);
+        seqname=sprintf('%04d',scenario-1800);
+    case intersect(scenario,1850:1899);
+        seqname=sprintf('%04d',scenario-1850);
+
+        
     otherwise
         
         error('unknown scenario');
@@ -375,7 +392,9 @@ switch(scenario)
         sceneInfo.frameRate=30;
     case intersect(scenario,301:399)
         sceneInfo.frameRate=2;
-    case intersect(scenario,500:799) % KITTI
+    case intersect(scenario,500:899) % KITTI
+        sceneInfo.frameRate=10;
+    case intersect(scenario,1500:1899) % KITTI
         sceneInfo.frameRate=10;
 
 end
@@ -514,6 +533,7 @@ switch(scenario)
     case intersect(scenario,500:549)
         sceneInfo.detfile=fullfile(dbfolder,dataset,'tracking','training','det_02','LSVM',sprintf('%04d-cars.xml',scenario-500));        
 %         sceneInfo.detfile=fullfile(dbfolder,dataset,'tracking','training','det_02','Victor',sprintf('%04d.mat',scenario-500));
+%         sceneInfo.detfile=fullfile(dbfolder,dataset,'tracking','training','det_02','regionlets',sprintf('%04d-cars.mat',scenario-500));        
     case intersect(scenario,550:599)        
         sceneInfo.detfile=fullfile(dbfolder,dataset,'tracking','testing','det_02','LSVM',sprintf('%04d-cars.xml',scenario-550));
     case intersect(scenario,700:749)
@@ -530,6 +550,18 @@ switch(scenario)
         sceneInfo.detfile=fullfile(dbfolder,dataset,'tracking','testing','det_02','LSVM',sprintf('%04d.mat',scenario-850));
     case intersect(scenario,900:917)
         sceneInfo.detfile=fullfile(dbfolder,dataset,'Dets',sprintf('acfDet-%02d.xml',scenario-900));
+    case intersect(scenario,1500:1549)
+        sceneInfo.detfile=fullfile(dbfolder,dataset,'tracking','training','det_02','regionlets',sprintf('%04d-cars.mat',scenario-1500));
+    case intersect(scenario,1550:1599)
+        sceneInfo.detfile=fullfile(dbfolder,dataset,'tracking','testing','det_02','regionlets',sprintf('%04d-cars.mat',scenario-1550));
+    case intersect(scenario,1700:1749)
+        sceneInfo.detfile=fullfile(dbfolder,dataset,'tracking','training','det_02','regionlets',sprintf('%04d-peds.mat',scenario-1700));
+    case intersect(scenario,1750:1799)
+        sceneInfo.detfile=fullfile(dbfolder,dataset,'tracking','testing','det_02','regionlets',sprintf('%04d-peds.mat',scenario-1750));
+    case intersect(scenario,1800:1849)
+        sceneInfo.detfile=fullfile(dbfolder,dataset,'tracking','training','det_02','regionlets',sprintf('%04d.mat',scenario-1800));
+    case intersect(scenario,1850:1899)
+        sceneInfo.detfile=fullfile(dbfolder,dataset,'tracking','testing','det_02','regionlets',sprintf('%04d.mat',scenario-1850));
     otherwise
         sceneInfo.detfile=fullfile(detfolder,[seqname sprintf('-result-00000-%05d-nms.idl',length(sceneInfo.frameNums)-1)]);
 end
@@ -616,9 +648,9 @@ switch(scenario)
         sceneInfo.imgFolder=fullfile(homefolder,'research','projects','irtracking','data','img',filesep);
     case 401
         sceneInfo.imgFolder=fullfile(homefolder,'diss','others','fayao','dataset_track','afl4','imgs',filesep);
-    case intersect(scenario,[500:549 600:620 700:749 800:849])
+    case intersect(scenario,[500:549 600:620 700:749 800:849 1500:1549 1700:1749 1800:1849])
         sceneInfo.imgFolder=fullfile(dbfolder,dataset,'tracking','training','image_02',seqname,filesep);
-    case intersect(scenario,[550:599 750:799 850:899])
+    case intersect(scenario,[550:599 750:799 850:899 1550:1599 1750:1799 1850:1899])
         sceneInfo.imgFolder=fullfile(dbfolder,dataset,'tracking','testing','image_02',seqname,filesep);
     case intersect(scenario,900:917)
         sceneInfo.imgFolder=fullfile(dbfolder,dataset,'Data',seqname,'images_left',filesep);
@@ -641,7 +673,9 @@ switch(scenario)
         imgExt='.jpg';                
     case intersect(scenario,401:409)
         imgExt='.png';
-    case intersect(scenario,500:599) % KITTI
+    case intersect(scenario,500:899) % KITTI
+        imgExt='.png';        
+    case intersect(scenario,1500:1899) % KITTI
         imgExt='.png';        
 end
 
@@ -668,7 +702,9 @@ switch(scenario)
         sceneInfo.imgFileFormat='frame_%05d';
     case intersect(scenario,401:409)
         sceneInfo.imgFileFormat='img%05d';
-    case intersect(scenario,500:599) % KITTI
+    case intersect(scenario,500:899) % KITTI
+        sceneInfo.imgFileFormat='%06d';
+    case intersect(scenario,1500:1899) % KITTI Regionlets
         sceneInfo.imgFileFormat='%06d';
 end
 if isempty(sceneInfo.imgFileFormat) || isempty(imgExt) || ~isfield(sceneInfo,'frameNums')
@@ -794,6 +830,9 @@ if scenario>400 && scenario<410, sceneInfo.targetSize=10; end
 if scenario>=500 && scenario<600, sceneInfo.targetSize=50; end % KITTI Cars
 if scenario>=700 && scenario<800, sceneInfo.targetSize=20; end % KITTI Peds
 if scenario>=800 && scenario<900, sceneInfo.targetSize=35; end % KITTI Cars+Peds
+if scenario>=1500 && scenario<1600, sceneInfo.targetSize=50; end % KITTI Cars Regionlets
+if scenario>=1700 && scenario<1800, sceneInfo.targetSize=20; end % KITTI Peds Regionlets
+if scenario>=1800 && scenario<1900, sceneInfo.targetSize=35; end % KITTI Cars+Peds Regionlets
 if opt.track3d, sceneInfo.targetSize=350; end
 if opt.track3d && ~isempty(intersect(scenario,301:399)), sceneInfo.targetSize=1500; end
 
@@ -817,6 +856,8 @@ switch(scenario)
     case intersect(scenario,401:409) % AFL
         sceneInfo.targetAR=1/2;
     case intersect(scenario,500:899) % KITTI
+        sceneInfo=rmfield(sceneInfo,'targetAR');
+    case intersect(scenario,1500:1899) % KITTI Regionlets
         sceneInfo=rmfield(sceneInfo,'targetAR');
     case intersect(scenario,600:620) % KITTI Victor
         sceneInfo=rmfield(sceneInfo,'targetAR');
@@ -894,6 +935,12 @@ switch(scenario)
         sceneInfo.gtFile=fullfile(dbfolder,dataset,'tracking','training','label_02','Victor',[seqname '.mat']);
     case intersect(scenario,900:917)
         sceneInfo.gtFile=fullfile(dbfolder,dataset,'Data',seqname,'anno_left','GT.mat');
+    case intersect(scenario,1500:1549) % KITTI Cars Regionlets
+        sceneInfo.gtFile=fullfile(dbfolder,dataset,'tracking','training','label_02',[seqname '-cars.mat']);
+    case intersect(scenario,1700:1749) % KITTI Peds Regionlets
+        sceneInfo.gtFile=fullfile(dbfolder,dataset,'tracking','training','label_02',[seqname '-peds.mat']);
+    case intersect(scenario,1800:1849) % KITTI Cars+Peds Regionlets
+        sceneInfo.gtFile=fullfile(dbfolder,dataset,'tracking','training','label_02',[seqname '.mat']);
         
     otherwise
         warning('ground truth?');

@@ -116,8 +116,8 @@ for t=1:F
 
     end
 %     saveas(gcf,sprintf('../../data/tmp/dets-%s-final-%04d.jpg',sceneInfo.sequence,t));
-    gd=getframe(gcf);
-    imwrite(gd.cdata,sprintf('tmp/dets/dets-%s-%04d.jpg',sceneInfo.sequence,t));
+%     gd=getframe(gcf);
+%     imwrite(gd.cdata,sprintf('tmp/dets/dets-%s-%04d.jpg',sceneInfo.sequence,t));
     pause(framePause)
 end
 
