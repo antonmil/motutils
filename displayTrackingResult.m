@@ -45,9 +45,9 @@ options.displayBoxes=1;
 options.displayID=1;
 options.displayCropouts=0;
 options.displayConnections=0;
-options.displayIDSwitches=1;
-options.displayFP=1;
-options.displayFN=1;
+options.displayIDSwitches=0;
+options.displayFP=0;
+options.displayFN=0;
 options.displayMetrics=1;
 options.matchColorsToGT=0;
 
@@ -60,7 +60,7 @@ global clusternr
 % options.outFolder=sprintf('tmp/IJVC/s%d',clusternr,sceneInfo.scenario);
 % options.outFolder=sprintf('tmp/iccv13/single/s%d',sceneInfo.scenario);
 % options.outFolder=sprintf('vis/clnr-%03d/s%d',clusternr,sceneInfo.scenario);
-options.outFolder='tmp/vis';
+% options.outFolder='tmp/vis';
 % options.outFolder=outfolder;
 % options.outFolder=sprintf('d:/acvt/projects/tracker-mot/data/tmp/s%04d',sceneInfo.scenario);
 % options.outFolder='d:\acvt\projects\tracker-mot\data\tmp\tld-s0025';
