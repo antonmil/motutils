@@ -1,5 +1,5 @@
 class Mail:
-    """ Dummy class to print messages without sending e-mails"""
+    """ Dummy class to print messages without sending e-mails""" 
     def __init__(self,mailaddress):
         pass
     def msg(self,msg):
