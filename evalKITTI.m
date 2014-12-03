@@ -1,4 +1,4 @@
-function metricsKITTI=evalKITTI(infos,cls)
+function metricsKITTI=evalKITTI(infos,setting,cls)
     % evaluate KITTI Training Set
     % requires a struct array infos 1x21
     
@@ -8,14 +8,17 @@ function metricsKITTI=evalKITTI(infos,cls)
         return;
     end
     
-    if nargin<2, cls='car'; end
+    if nargin<2, setting='a'; end
+    if nargin<3, cls='car'; end
     
     cls=lower(cls);
+    resdir=sprintf('results/%s/data',setting);
     
     thiswd=pwd;
     
     pathToKittiDevkit='../motutils/external/KITTI/devkit_tracking/python';
-    
+    cd(pathToKittiDevkit)
+    if ~exist(resdir,'dir'), mkdir(resdir); end
     
     allscen=1:21;
     for scenario=allscen
@@ -23,13 +26,14 @@ function metricsKITTI=evalKITTI(infos,cls)
         cd(thiswd)
         tracklets=convertToKITTI(stateInfo,cls);
         cd(pathToKittiDevkit)
+	addpath(genpath('..'));
 
-        writeLabels(tracklets,'results/a/data',scenario-1);
+        writeLabels(tracklets,resdir,scenario-1);
     end
     
-    
-    !python evaluate_tracking.py a
-    metricsKITTI=dlmread(sprintf('results/a/stats_%s.txt',cls));
+    pythonstr=sprintf('!~/software/python/bin/python evaluate_tracking.py %s',setting)
+    eval(pythonstr);
+    metricsKITTI=dlmread(sprintf('results/%s/stats_%s.txt',setting,cls));
     
     cd(thiswd);
 end

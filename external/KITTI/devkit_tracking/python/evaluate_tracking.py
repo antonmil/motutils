@@ -837,7 +837,7 @@ class trackingEvaluation(object):
         for seq_idx, seq_data in self.www_img.iteritems():
             for frame in seq_data:
                 # load image
-                filename = os.path.join("/home/amilan/storage/databases/KITTI/tracking/training/image_02", "%s/%06d.png" % (seq_idx,frame))
+                filename = os.path.join("data/tracking/image_02", "%s/%06d.png" % (seq_idx,frame))
                 im = Image.open(filename)
 
                 # draw bounding boxes
@@ -903,7 +903,7 @@ def evaluate(result_sha,mail):
             mail.msg("   Caught exception while .")
         if e.compute3rdPartyMetrics():
             e.saveToStats(cls=c)
-            e.createImages(cls=c)
+            #e.createImages(cls=c)
         else:
             mail.msg("There seem to be no true positives or false positives at all in the submitted data.")
 
