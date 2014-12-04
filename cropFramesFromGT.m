@@ -2,14 +2,14 @@ function gtInfo=cropFramesFromGT(sceneInfo,gtInfo,frames,opt)
 % remove unnecessary frkeep from GT
 % 
 
-global scenario;
+% global scenario;
 if sceneInfo.gtAvailable
     
     
     frkeep=frames;
-    if scenario>=195 && scenario<=199
-        [a b frkeep]=intersect(frames,gtInfo.frameNums);
-    end
+%     if scenario>=195 && scenario<=199
+%         [a b frkeep]=intersect(frames,gtInfo.frameNums);
+%     end
 
     gtInfo.frameNums=gtInfo.frameNums(frkeep);
     gtInfo.X=gtInfo.X(frkeep,:);gtInfo.Y=gtInfo.Y(frkeep,:);

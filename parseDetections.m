@@ -10,13 +10,13 @@ detfile=sceneInfo.detfile;
 [pathstr, filename, fileext]=fileparts(detfile);
 % is there a .mat file available?
 matfile=fullfile(pathstr,[filename '.mat']);
-if exist(matfile,'file')
+if 0 && exist(matfile,'file')
     load(matfile,'detections')
     detections=setDetectionPositions(detections,opt,sceneInfo);
     
     % rescale confidense if necessary
     if scenario<190
-     detections=rescaleConfidence(detections,opt);
+        detections=rescaleConfidence(detections,opt);
     end
 
     
@@ -49,6 +49,7 @@ end
 
 if      strcmpi(fileext,'.idl'); detFileType=1;
 elseif  strcmpi(fileext,'.xml'); detFileType=2;
+elseif  strcmpi(fileext,'.txt'); detFileType=3;
 else    error('Unknown type of detections file.');
 end
 
@@ -206,6 +207,54 @@ elseif detFileType==2
         
         nDets=nDets+length(xis);
     end
+elseif detFileType==3
+    
+    detRaw=dlmread(sceneInfo.detfile);
+    
+    sceneInfo.targetSize = mean(detRaw(:,5))/2;
+    sceneInfo.yshift=0;
+    F=length(sceneInfo.frameNums);
+    
+    
+    for t=1:F
+        detections(t).bx=[];
+        detections(t).by=[];
+        detections(t).xi=[];
+        detections(t).yi=[];
+        detections(t).xp=[];
+        detections(t).yp=[];
+        detections(t).wd=[];
+        detections(t).ht=[];
+        detections(t).sc=[];
+    end
+    
+    for d=1:size(detRaw,1)
+        t=detRaw(d,1);
+        
+        w=detRaw(d,5);
+        h=detRaw(d,6);
+        bx=detRaw(d,3);
+        by=detRaw(d,4);
+        xi=detRaw(d,3)+w/2;
+        yi=detRaw(d,4)+h;
+        sc=detRaw(d,7);
+        sc(:)=1./(1+exp(-sc));
+        % SCORES?
+        
+        detections(t).bx=[detections(t).bx bx];
+        detections(t).by=[detections(t).by by];
+        detections(t).xi=[detections(t).xi xi];
+        detections(t).yi=[detections(t).yi yi];
+        detections(t).xp=[detections(t).xp xi];
+        detections(t).yp=[detections(t).yp yi];
+        detections(t).wd=[detections(t).wd w];
+        detections(t).ht=[detections(t).ht h];
+        detections(t).sc=[detections(t).sc sc];
+    end        
+    
+    if nargin>1
+        detections=detections(frames);
+    end
     
 end
 
@@ -227,16 +276,7 @@ end
 function detections=projectToGP(detections,sceneInfo)
     global opt
     F=length(detections);
-    
-    % PRML
-    if sceneInfo.scenario>300 && sceneInfo.scenario<400
-        for t=1:length(detections)
-            detections(t).xw = sceneInfo.camPar.scale*detections(t).xi;
-            detections(t).yw = sceneInfo.camPar.scale*detections(t).yi;
-        end
-        return;
-    end
-    
+
     
     direxist=isfield(detections(1),'dirxi');
     if opt.track3d

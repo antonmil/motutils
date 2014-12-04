@@ -1,6 +1,16 @@
 function sceneInfo=getSceneInfo(scenario, opt)
 % fill all necessary information about the
 % scene into the sceneInfo struct
+
+% if string, read from file
+if ischar(scenario)
+    sceneInfo=readSceneOptions(scenario);
+    sceneInfo.yshift=0;
+    
+    
+
+    return;
+end
 %
 % Required:
 %   detfile         detections file (.idl or .xml)
