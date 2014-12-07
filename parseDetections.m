@@ -213,7 +213,7 @@ elseif detFileType==3
     
     sceneInfo.targetSize = mean(detRaw(:,5))/2;
     sceneInfo.yshift=0;
-    F=length(sceneInfo.frameNums);
+    F=max(detRaw(:,1));
     
     
     for t=1:F

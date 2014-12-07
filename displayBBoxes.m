@@ -57,7 +57,7 @@ for t=renderframes
     clf
     set(gcf,'Renderer','painters');
     if sceneInfo.imgWidth<=2800    
-        im=double(imread([sceneInfo.imgFolder sprintf(sceneInfo.imgFileFormat,sceneInfo.frameNums(t))]))/255;
+        im=getFrame(sceneInfo,t);
     else
         im=zeros(sceneInfo.imgHeight,sceneInfo.imgWidth,3);
     end
