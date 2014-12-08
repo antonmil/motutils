@@ -63,11 +63,11 @@ assert(exist(sceneInfo.detfile,'file')>0, ...
     ['Detection ' sceneInfo.detfile ' does not exist.']);
 
 % figure out frames, format, etc.
-[sceneInfo.imgFileFormat, imgExt, sceneInfo.frameNums] = ...
+[sceneInfo.imgFileFormat, sceneInfo.imgExt, sceneInfo.frameNums] = ...
     getImgFormat(sceneInfo.imgFolder);
 
 % append file extension
-sceneInfo.imgFileFormat=[sceneInfo.imgFileFormat, imgExt];
+sceneInfo.imgFileFormat=[sceneInfo.imgFileFormat, sceneInfo.imgExt];
 
 % image dimensions
 [sceneInfo.imgHeight, sceneInfo.imgWidth, ~] = size(getFrame(sceneInfo,1));
