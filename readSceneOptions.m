@@ -49,7 +49,7 @@ function sceneInfo=checkScene(sceneInfo)
 % TODO: Insert on-the-fly detector
 
 % mandatory fields
-requiredFields={'imgFolder','frameRate','detfile'};
+requiredFields={'imgFolder','frameRate'};
 
 for f=requiredFields
     fchar=char(f);
@@ -57,10 +57,10 @@ for f=requiredFields
         ['Field ' fchar ' is required']);
 end
 
+sceneInfo.imgFolder=[sceneInfo.imgFolder,'/'];
+
 assert(exist(sceneInfo.imgFolder,'dir')>0, ...
     ['Image Folder ' sceneInfo.imgFolder ' does not exist.']);
-assert(exist(sceneInfo.detfile,'file')>0, ...
-    ['Detection ' sceneInfo.detfile ' does not exist.']);
 
 % figure out frames, format, etc.
 [sceneInfo.imgFileFormat, sceneInfo.imgExt, sceneInfo.frameNums] = ...
@@ -71,6 +71,26 @@ sceneInfo.imgFileFormat=[sceneInfo.imgFileFormat, sceneInfo.imgExt];
 
 % image dimensions
 [sceneInfo.imgHeight, sceneInfo.imgWidth, ~] = size(getFrame(sceneInfo,1));
+
+
+% run detector if no detfile given
+if ~isfield(sceneInfo,'detfile')
+    detfile=detectPeople(sceneInfo);
+    sceneInfo.detfile = fullfile(detfile);
+
+end
+
+if ~isfield(sceneInfo,'dataset')
+    sceneInfo.dataset='unknown';
+end
+if ~isfield(sceneInfo,'sequence')
+    sceneInfo.sequence='unknown';
+end
+
+assert(exist(sceneInfo.detfile,'file')>0, ...
+    ['Detection ' sceneInfo.detfile ' does not exist.']);
+
+
 
 % ground truth
 sceneInfo.gtAvailable=0;
