@@ -2,6 +2,7 @@ function writeLabels(tracklets,label_dir, seq_idx)
 
 % parse input file
 fid = fopen(sprintf('%s/%04d.txt',label_dir,seq_idx),'w');
+% sprintf('%s/%04d.txt',label_dir,seq_idx)
 
 % for all frames do
 for f = 1:numel(tracklets)
