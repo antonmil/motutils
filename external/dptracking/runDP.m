@@ -1,69 +1,41 @@
-function [metrics2d, metrics3d, allens, stateInfo]=runDP(scen, opt, myopt)
+function stateInfo=runDP(detections, opt, myopt)
 
-% clear all
-% addpath(('~/visinf/projects/ongoing/dctracking'));
-% addpath(('~/visinf/projects/ongoing/contracking'));
-% addpath(genpath('~/visinf/projects/ongoing/contracking/utils'));
-% addpath('3rd_party/voc-release3.1/');           %% this code is downloaded from http://people.cs.uchicago.edu/~pff/latent/
-% addpath('3rd_party/cs2/');                      %% this code is downloaded from http://www.igsystems.com/cs2/index.html and then mex'ed to run faster in matlab.
+global sceneInfo
 
-
-
-global gtInfo scenario sceneInfo detections
-
-% scen=72;
-scenario=72;
-if nargin, scenario=scen; end
-
-% opt=getDCOptions;
-% opt=getConOptions;
+% check if opt struct is what we want
 if ~isfield(opt,'c_en')
     opt=getPirOptions(opt);
 end
-% opt.cutToTA=0;
-%  sceneInfo=getSceneInfo(scenario);
-allens=[];
 
-
-[metrics2d, metrics3d]=getMetricsForEmptySolution();
 stateInfo=getStateForEmptySolution(sceneInfo,opt);
-allens=0;
+F = length(sceneInfo.frameNums);
+frames=1:F;
 
+% frames=1:length(sceneInfo.frameNums);
+% % frames=1:100;
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% % frames=1:30; % do a part of the whole sequence
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% if isfield(myopt,'frames'), frames=myopt.frames; end
+% 
+% if length(sceneInfo.frameNums)<frames(end), frames=1:length(sceneInfo.frameNums); end % if section outside range
+% sceneInfo.frameNums=sceneInfo.frameNums(frames);
 
-
-frames=1:length(sceneInfo.frameNums);
-% frames=1:100;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% frames=1:30; % do a part of the whole sequence
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-if isfield(myopt,'frames'), frames=myopt.frames; end
-
-if length(sceneInfo.frameNums)<frames(end), frames=1:length(sceneInfo.frameNums); end % if section outside range
-sceneInfo.frameNums=sceneInfo.frameNums(frames);
-
-myopt.seqLength=length(frames);
-
-%  [detections, nPoints]=parseDetections(sceneInfo,frames,myopt.detThreshold); 
-%  [detections, nPoints]=cutDetections(detections,nPoints,sceneInfo, myopt);
-%  nPoints
-%  sceneInfo.imTopLimit=max(1,min([detections(:).yi]-10));
-%  sceneInfo=computeImBordersOnGroundPlane(myopt,sceneInfo,detections);
+% myopt.seqLength=length(frames);
 
 dres=detectionsToPirsiavash(detections);
 
-%  gtInfo=cropFramesFromGT(sceneInfo,gtInfo,frames,myopt);
-
-datadir  = 'data/';
+% datadir  = 'data/';
 cachedir = 'cache/';
 if ~exist(cachedir,'dir'), mkdir(cachedir);end
 vid_name = sceneInfo.sequence;
-vid_path = sceneInfo.imgFolder;
+% vid_path = sceneInfo.imgFolder;
 
 
 %%% Adding transition links to the graph by fiding overlapping detections in consequent frames.
 display('in building the graph...')
-fname = [cachedir vid_name '_graph_res.mat'];
-  dres = build_graph(dres);
+% fname = [cachedir vid_name '_graph_res.mat'];
+dres = build_graph(dres);
 
 % try
 %   load(fname)
@@ -132,18 +104,14 @@ bboxes_tracked = dres2bboxes(dres_dp, fnum);  %% we are visualizing the "DP with
 %     bboxes_tracked(201).bbox=[];
 % end
 %% pad rest
-if length(bboxes_tracked)<length(frames)
-    for pp=length(bboxes_tracked)+1:length(frames)
+if length(bboxes_tracked)<F
+    for pp=length(bboxes_tracked)+1:F
         bboxes_tracked(pp).bbox=[];
     end
 end
 
 
 
-% alldpoints
-% length([detections(:).xp])
-% length(sceneInfo.frameNums)
-% length(bboxes_tracked)
 stateInfo=boxesToStateInfo(bboxes_tracked,sceneInfo);
 
 stateInfo=postProcessState(stateInfo);
@@ -159,10 +127,3 @@ if isfield(myopt,'dataFunction')
   stateInfo.opt = myopt;
 end
 
-%  global do2d
-%  do2d=false;
-%  if sceneInfo.gtAvailable
-%  %     [metrics metricsInfo additionalInfo]=CLEAR_MOT(gtInfo,stateInfo);
-%      [metrics2d, metrics3d]=printFinalEvaluation(stateInfo, gtInfo, sceneInfo,myopt);
-%  end
-% startPT=stateInfo; save(sprintf('results/startPT-pir-s%04d.mat',scenario),'startPT');

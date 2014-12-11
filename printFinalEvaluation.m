@@ -12,9 +12,9 @@ end
 if sceneInfo.gtAvailable
 %     if do2d
     if metricsTypes(1)
-    printMessage(1,'\nEvaluation 2D:\n');
-    [metrics2d, metricsInfo2d, addInfo2d]=CLEAR_MOT(gtInfo,stateInfo);
-    printMetrics(metrics2d,metricsInfo2d,1);
+        printMessage(1,'\nEvaluation 2D:\n');
+        [metrics2d, metricsInfo2d, addInfo2d]=CLEAR_MOT(gtInfo,stateInfo);
+        printMetrics(metrics2d,metricsInfo2d,1);
     end
 %     end
     

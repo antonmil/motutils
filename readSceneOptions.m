@@ -101,7 +101,18 @@ if isfield(sceneInfo,'gtFile')
         global gtInfo
         gtInfo=convertTXTToStruct(sceneInfo.gtFile);
         gtInfo.X=gtInfo.Xi; gtInfo.Y=gtInfo.Yi;
+        
+        
     end
+end
+
+%
+if isfield(sceneInfo,'camFile')
+    sceneInfo.camPar = parseCameraParameters(sceneInfo.camFile);
+    if ~isfield(gtInfo,'Xgp') || ~isfield(gtInfo,'Ygp')
+        [gtInfo.Xgp, gtInfo.Ygp]=projectToGroundPlane(gtInfo.X, gtInfo.Y, sceneInfo);
+        gtInfo.X=gtInfo.Xgp;gtInfo.Y=gtInfo.Ygp;
+    end       
 end
 
 end

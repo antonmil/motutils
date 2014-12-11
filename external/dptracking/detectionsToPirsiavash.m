@@ -1,4 +1,6 @@
 function dets=detectionsToPirsiavash(detections)
+% convert our detection array struct to DP Tracker
+
 ndets=length(detections);
 dets=[];
 dets.x=[detections.bx]';

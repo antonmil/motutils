@@ -46,8 +46,8 @@ options.displayID=1;
 options.displayCropouts=0;
 options.displayConnections=0;
 options.displayIDSwitches=0;
-options.displayFP=0;
-options.displayFN=0;
+options.displayFP=1;
+options.displayFN=1;
 options.displayMetrics=0;
 options.matchColorsToGT=0;
 

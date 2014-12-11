@@ -41,42 +41,7 @@ if length(gtInfo.frameNums)==999 || length(gtInfo.frameNums)==354
 end
 
 global scenario
-% % PNNL HACK
-% if scenario>190
-% %     td=0.3;
-% end
-if ~isempty(intersect(scenario,[195:199]))
-    [a b c]=intersect(stateInfo.frameNums,gtInfo.frameNums);
-%     stateInfo.frameNums
-%     gtInfo.frameNums
-%     a
-%     b    
-%     c
-    frkeep=b;
-%     pause
-%     [F N]=size(stateInfo.X);
-%     frkeep=1:3:F;
-%     stateInfo.frameNums
-%     frkeep
-    stateInfo.frameNums=stateInfo.frameNums(frkeep);
-        stateInfo.X=stateInfo.X(frkeep,:);stateInfo.Y=stateInfo.Y(frkeep,:);
-    stateInfo.W=stateInfo.W(frkeep,:);stateInfo.H=stateInfo.H(frkeep,:);
-    if options.eval3d
-        stateInfo.Xgp=stateInfo.Xgp(frkeep,:);stateInfo.Ygp=stateInfo.Ygp(frkeep,:);
-    end
-    stateInfo.Xi=stateInfo.Xi(frkeep,:);stateInfo.Yi=stateInfo.Yi(frkeep,:);
-end
-
-if ~isempty(intersect(scenario,[301:399]))
-    td=1500;
-end
     
-%  stateInfo.frameNums
-%  gtInfo.frameNums
-% stateInfo.X
-% gtInfo.X
-% pause
-
 assert(length(gtInfo.frameNums)==length(stateInfo.frameNums), ...
     'Ground Truth and state must be of equal length');
 
@@ -100,8 +65,8 @@ end
 gtInd=~~gtInfo.X;
 stInd=~~stateInfo.X;
 
-[Fgt Ngt]=size(gtInfo.X);
-[F N]=size(stateInfo.X);
+[Fgt, Ngt]=size(gtInfo.X);
+[F, N]=size(stateInfo.X);
 
 % aspectRatio=mean(gtInfo.W(~~gtInfo.W)./gtInfo.H(~~gtInfo.H));
 % gtInfo.W=gtInfo.H*aspectRatio;
@@ -136,23 +101,6 @@ metrics(4)=Ngt;                 % GT Trajectories
 additionalInfo=[];
 % nothing to be done, if state is empty
 if ~N, return; end
-
-% global opt
-% if options.eval3d && opt.mex
-%     [MOTA MOTP ma fpa mmea idsw missed falsepositives idswitches at afp MT PT ML rc pc faf FM MOTAL alld]= ...
-%         CLEAR_MOT_mex(gtInfo.Xgp', gtInfo.Ygp', stateInfo.Xgp', stateInfo.Ygp',options.td);
-% 
-% %     cd /home/aanton/diss/utils
-% %     [MOTA MOTP ma fpa mmea idsw missed falsepositives idswitches at afp MT PT ML rc pc faf FM MOTAL alld]= ...
-% %         CLEAR_MOT(gtInfo.Xgp, gtInfo.Ygp, stateInfo.Xgp, stateInfo.Ygp,options.td);
-% %     cd /home/aanton/visinf/projects/ongoing/contracking
-%     metrics=[rc*100, pc*100, faf, Ngt, MT, PT, ML, falsepositives, missed, idswitches, FM, MOTA*100, MOTP*100, MOTAL*100];
-%     metrics
-%     global gsi
-%     gsi=stateInfo;
-%     pause
-%     return;
-% end
 
 
 % mapping
@@ -216,8 +164,8 @@ for t=1:F
         
         while maxisect > td && numel(GTsNotMapped)>0 && numel(EsNotMapped)>0
             for o=GTsNotMapped
-                GT=[gtInfo.X(t,o)-gtInfo.W(t,o)/2 ...
-                    gtInfo.Y(t,o)-gtInfo.H(t,o) ...
+                GT=[gtInfo.Xi(t,o)-gtInfo.W(t,o)/2 ...
+                    gtInfo.Yi(t,o)-gtInfo.H(t,o) ...
                     gtInfo.W(t,o) gtInfo.H(t,o) ];
                 for e=EsNotMapped
                     E=[stateInfo.Xi(t,e)-stateInfo.W(t,e)/2 ...

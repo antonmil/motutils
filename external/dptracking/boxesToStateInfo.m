@@ -22,7 +22,7 @@ for t=1:F
         ht=bboxes_tracked(t).bbox(:,4)'-by;
         Xi(t,ids)=bx+wd/2;
         if opt.track3d
-            Yi(t,ids)=by+ht/2;
+            Yi(t,ids)=by+ht;
         else
             Yi(t,ids)=by+ht;
         end
@@ -34,11 +34,11 @@ end
 stateInfo.X=Xi; stateInfo.Y=Yi;
 stateInfo.Xi=Xi;stateInfo.Yi=Yi;stateInfo.W=W;stateInfo.H=H;
 if opt.track3d
-    [stateInfo.Xgp stateInfo.Ygp]=projectToGroundPlane(stateInfo.Xi, stateInfo.Yi, sceneInfo);
+    [stateInfo.Xgp, stateInfo.Ygp]=projectToGroundPlane(stateInfo.Xi, stateInfo.Yi, sceneInfo);
     stateInfo.X=stateInfo.Xgp;
     stateInfo.Y=stateInfo.Ygp;
 end
-[X Y stateInfo]=cleanState(stateInfo.X, stateInfo.Y,stateInfo);
+[X, Y, stateInfo]=cleanState(stateInfo.X, stateInfo.Y,stateInfo);
 
 
 end
