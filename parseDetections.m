@@ -1,4 +1,4 @@
-function [detections nDets]=parseDetections(sceneInfo,frames, confthr)
+function [detections, nDets]=parseDetections(sceneInfo,frames, confthr)
 % read detection file and create a struct array
 
 global opt scenario
@@ -238,7 +238,13 @@ elseif detFileType==3
         xi=detRaw(d,3)+w/2;
         yi=detRaw(d,4)+h;
         sc=detRaw(d,7);
-        sc(:)=1./(1+exp(-sc));
+        
+        % if scores not between 0 and 1
+        % apply sigmoid (kinda hacky)
+        if min(sc(:)) < 0 || max(sc(:)) > 1
+            fprintf('applying sigmoid transform to det conf.\n');
+            sc(:)=1./(1+exp(-sc));
+        end
         % SCORES?
         
         detections(t).bx=[detections(t).bx bx];
