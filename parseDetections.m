@@ -239,14 +239,6 @@ elseif detFileType==3
         yi=detRaw(d,4)+h;
         sc=detRaw(d,7);
         
-        % if scores not between 0 and 1
-        % apply sigmoid (kinda hacky)
-        if min(sc(:)) < 0 || max(sc(:)) > 1
-            fprintf('applying sigmoid transform to det conf.\n');
-            sc(:)=1./(1+exp(-sc));
-        end
-        % SCORES?
-        
         detections(t).bx=[detections(t).bx bx];
         detections(t).by=[detections(t).by by];
         detections(t).xi=[detections(t).xi xi];
@@ -258,6 +250,16 @@ elseif detFileType==3
         detections(t).sc=[detections(t).sc sc];
     end        
     
+        % if scores not between 0 and 1
+        % apply sigmoid (kinda hacky)
+        if min([detections(:).sc]) < 0 || max([detections(:).sc]) > 1
+            fprintf('applying sigmoid transform to det conf.\n');
+            for t=1:F
+                detections(t).sc = 1./(1+exp(-detections(t).sc));
+            end
+            
+        end
+        
     if nargin>1
         detections=detections(frames);
     end
