@@ -1,4 +1,4 @@
-function [metrics metricsInfo additionalInfo]=CLEAR_MOT(gtInfo,stateInfo,options)
+function [metrics metricsInfo additionalInfo]=CLEAR_MOT_HUN(gtInfo,stateInfo,options)
 % compute CLEAR MOT and other metrics
 %
 % metrics contains the following
@@ -16,12 +16,8 @@ function [metrics metricsInfo additionalInfo]=CLEAR_MOT(gtInfo,stateInfo,options
 % [14]  MOTAL	- Multi-object tracking accuracy in [0,100] with log10(idswitches)
 %
 % 
-% (C) Anton Milan, 2012-2015
-%
-%
-% Changelog:
-%
-% 25.01.2015 - assignment bug fixed (thanks Michael Herrmann)
+% (C) Anton Milan, 2012-2014
+
 
 % default options: 2D
 if nargin<3
@@ -39,32 +35,11 @@ end
 
 td=options.td;
 
-% ETH HACK, Nevatias Evaluation is with 0.4 IOU
-if length(gtInfo.frameNums)==999 || length(gtInfo.frameNums)==354
-    td=0.4;
-end
-
-global scenario
-    
-assert(length(gtInfo.frameNums)==length(stateInfo.frameNums), ...
-    'Ground Truth and state must be of equal length');
-
-assert(all(gtInfo.frameNums==stateInfo.frameNums), ...
-    'Ground Truth and state must contain equal frame numbers');
-
-% check if all necessery info is available
-if options.eval3d
-    assert(all(isfield(gtInfo,{'Xgp','Ygp'})), ...
-        'Ground Truth Ground Plane coordinates needed for 3D evaluation');
-    assert(all(isfield(stateInfo,{'Xgp','Ygp'})), ...
-        'Ground Plane coordinates needed for 3D evaluation');
-else
-    assert(all(isfield(gtInfo,{'Xi','Yi','W','H'})), ...
-        'Ground Truth coordinates Xi,Yi,W,H needed for 2D evaluation');
-    assert(all(isfield(stateInfo,{'Xi','Yi','W','H'})), ...
-        'State coordinates Xi,Yi,W,H needed for 2D evaluation');
-    
-end
+% if X,Y not existent, assume 2D
+if ~isfield(gtInfo,'X'), gtInfo.X=gtInfo.Xi; end
+if ~isfield(gtInfo,'Y'), gtInfo.Y=gtInfo.Yi; end
+if ~isfield(stateInfo,'X'), stateInfo.X=stateInfo.Xi; end
+if ~isfield(stateInfo,'Y'), stateInfo.Y=stateInfo.Yi; end
 
 gtInd=~~gtInfo.X;
 stInd=~~stateInfo.X;
@@ -72,8 +47,15 @@ stInd=~~stateInfo.X;
 [Fgt, Ngt]=size(gtInfo.X);
 [F, N]=size(stateInfo.X);
 
-% aspectRatio=mean(gtInfo.W(~~gtInfo.W)./gtInfo.H(~~gtInfo.H));
-% gtInfo.W=gtInfo.H*aspectRatio;
+% if stateInfo shorter, pad with zeros
+if F<Fgt
+    missingFrames = F+1:Fgt;
+    stateInfo.Xi(missingFrames,:)=0;
+    stateInfo.Yi(missingFrames,:)=0;
+    stateInfo.W(missingFrames,:)=0;
+    stateInfo.H(missingFrames,:)=0;
+end
+
 
 
 metricsInfo.names.long = {'Recall','Precision','False Alarm Rate', ...
@@ -105,6 +87,23 @@ metrics(4)=Ngt;                 % GT Trajectories
 additionalInfo=[];
 % nothing to be done, if state is empty
 if ~N, return; end
+
+% global opt
+% if options.eval3d && opt.mex
+%     [MOTA MOTP ma fpa mmea idsw missed falsepositives idswitches at afp MT PT ML rc pc faf FM MOTAL alld]= ...
+%         CLEAR_MOT_mex(gtInfo.Xgp', gtInfo.Ygp', stateInfo.Xgp', stateInfo.Ygp',options.td);
+% 
+% %     cd /home/aanton/diss/utils
+% %     [MOTA MOTP ma fpa mmea idsw missed falsepositives idswitches at afp MT PT ML rc pc faf FM MOTAL alld]= ...
+% %         CLEAR_MOT(gtInfo.Xgp, gtInfo.Ygp, stateInfo.Xgp, stateInfo.Ygp,options.td);
+% %     cd /home/aanton/visinf/projects/ongoing/contracking
+%     metrics=[rc*100, pc*100, faf, Ngt, MT, PT, ML, falsepositives, missed, idswitches, FM, MOTA*100, MOTP*100, MOTAL*100];
+%     metrics
+%     global gsi
+%     gsi=stateInfo;
+%     pause
+%     return;
+% end
 
 
 % mapping
@@ -144,51 +143,100 @@ for t=1:F
         alldist=Inf*ones(Ngt,N);
     
         mindist=0;
-        while mindist < td && numel(GTsNotMapped)>0 && numel(EsNotMapped)>0
-            for o=GTsNotMapped
-                GT=[gtInfo.Xgp(t,o) gtInfo.Ygp(t,o)];
-                for e=EsNotMapped
-                    E=[stateInfo.Xgp(t,e) stateInfo.Ygp(t,e)];
-                    alldist(o,e)=norm(GT-E);
-                end
-            end
-            [mindist cind]=min(alldist(:));
-
-            if mindist <= td
-                [u v]=ind2sub(size(alldist),cind);
-                M(t,u)=v;
-                alldist(:,v)=Inf;alldist(u,:)=Inf;
-                GTsNotMapped=find(~M(t,:) & gtInd(t,:));
-                EsNotMapped=setdiff(find(stInd(t,:)),M(t,:));
+        for o=GTsNotMapped
+            GT=[gtInfo.Xgp(t,o) gtInfo.Ygp(t,o)];
+            for e=EsNotMapped
+                E=[stateInfo.Xgp(t,e) stateInfo.Ygp(t,e)];
+                alldist(o,e)=norm(GT-E);
             end
         end
+            
+        
+        tmpai=alldist;        
+        tmpai(tmpai>td)=Inf;
+        [Mtch,Cst]=Hungarian(tmpai);
+        [u,v]=find(Mtch);
+        
+        for mmm=1:length(u)
+            M(t,u(mmm))=v(mmm);
+        end
+        
+        
+%         while mindist < td && numel(GTsNotMapped)>0 && numel(EsNotMapped)>0
+%             for o=GTsNotMapped
+%                 GT=[gtInfo.Xgp(t,o) gtInfo.Ygp(t,o)];
+%                 for e=EsNotMapped
+%                     E=[stateInfo.Xgp(t,e) stateInfo.Ygp(t,e)];
+%                     alldist(o,e)=norm(GT-E);
+%                 end
+%             end
+%             
+%             [mindist cind]=min(alldist(:));
+% 
+%             if mindist <= td
+%                 [u v]=ind2sub(size(alldist),cind);
+%                 M(t,u)=v;
+%                 alldist(:,v)=Inf;
+%                 GTsNotMapped=find(~M(t,:) & gtInd(t,:));
+%                 EsNotMapped=setdiff(find(stInd(t,:)),M(t,:));
+%             end
+%         end
     
     else
         allisects=zeros(Ngt,N);        maxisect=Inf;
         
-        while maxisect > td && numel(GTsNotMapped)>0 && numel(EsNotMapped)>0
-            for o=GTsNotMapped
-                GT=[gtInfo.Xi(t,o)-gtInfo.W(t,o)/2 ...
-                    gtInfo.Yi(t,o)-gtInfo.H(t,o) ...
-                    gtInfo.W(t,o) gtInfo.H(t,o) ];
-                for e=EsNotMapped
-                    E=[stateInfo.Xi(t,e)-stateInfo.W(t,e)/2 ...
-                        stateInfo.Yi(t,e)-stateInfo.H(t,e) ...
-                        stateInfo.W(t,e) stateInfo.H(t,e) ];
-                    allisects(o,e)=boxiou(GT(1),GT(2),GT(3),GT(4),E(1),E(2),E(3),E(4));
-                end
+        for o=GTsNotMapped
+            GT=[gtInfo.X(t,o)-gtInfo.W(t,o)/2 ...
+                gtInfo.Y(t,o)-gtInfo.H(t,o) ...
+                gtInfo.W(t,o) gtInfo.H(t,o) ];
+            for e=EsNotMapped
+                E=[stateInfo.Xi(t,e)-stateInfo.W(t,e)/2 ...
+                    stateInfo.Yi(t,e)-stateInfo.H(t,e) ...
+                    stateInfo.W(t,e) stateInfo.H(t,e) ];
+                allisects(o,e)=boxiou(GT(1),GT(2),GT(3),GT(4),E(1),E(2),E(3),E(4));
             end
-            [maxisect cind]=max(allisects(:));
-
-            if maxisect >= td
-                [u v]=ind2sub(size(allisects),cind);
-                M(t,u)=v;
-                allisects(:,v)=0;allisects(u,:)=0;
-                GTsNotMapped=find(~M(t,:) & gtInd(t,:));
-                EsNotMapped=setdiff(find(stInd(t,:)),M(t,:));
-            end
-
         end
+            
+        
+        tmpai=allisects;
+        tmpai=1-tmpai;
+        tmpai(tmpai>td)=Inf;
+        [Mtch,Cst]=Hungarian(tmpai);
+        [u,v]=find(Mtch);
+        
+        M=M;
+        for mmm=1:length(u)
+            M(t,u(mmm))=v(mmm);
+        end
+        
+%         GTsNotMapped=find(~M(t,:) & gtInd(t,:));
+%         EsNotMapped=setdiff(find(stInd(t,:)),M(t,:));
+            
+%         while maxisect > td && numel(GTsNotMapped)>0 && numel(EsNotMapped)>0
+% 
+%             for o=GTsNotMapped
+%                 GT=[gtInfo.X(t,o)-gtInfo.W(t,o)/2 ...
+%                     gtInfo.Y(t,o)-gtInfo.H(t,o) ...
+%                     gtInfo.W(t,o) gtInfo.H(t,o) ];
+%                 for e=EsNotMapped
+%                     E=[stateInfo.Xi(t,e)-stateInfo.W(t,e)/2 ...
+%                         stateInfo.Yi(t,e)-stateInfo.H(t,e) ...
+%                         stateInfo.W(t,e) stateInfo.H(t,e) ];
+%                     allisects(o,e)=boxiou(GT(1),GT(2),GT(3),GT(4),E(1),E(2),E(3),E(4));
+%                 end
+%             end
+%             
+%             [maxisect, cind]=max(allisects(:));
+% 
+%             if maxisect >= td
+%                 [u, v]=ind2sub(size(allisects),cind);
+%                 M(t,u)=v;
+%                 allisects(:,v)=0;
+%                 GTsNotMapped=find(~M(t,:) & gtInd(t,:));
+%                 EsNotMapped=setdiff(find(stInd(t,:)),M(t,:));
+%             end
+% 
+%         end
     end
     
     curtracked=find(M(t,:));
