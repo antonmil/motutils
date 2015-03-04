@@ -19,7 +19,7 @@ end
 
 % if trackingArea not defined, used min max from detections
 if isfield(sceneInfo,'trackingArea')
-    trAr=sceneInfo.trAr;
+    trAr=sceneInfo.trackingArea;
 else
     trAr=[ min([detections(:).xp]), ...
         max([detections(:).xp]), ...
