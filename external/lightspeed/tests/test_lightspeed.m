@@ -23,4 +23,5 @@ test_solve_tri
 test_sorted
 test_sparse
 test_sqdist
+test_wishpdf
 disp('All tests completed')

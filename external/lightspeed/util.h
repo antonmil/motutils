@@ -1,10 +1,8 @@
-#define mxCopy(a,n,e) memcpy(mxCalloc(n,e), a, (n)*(e))
-
 double Rand(void);
 double RandN(void);
 double GammaRand(double a);
 double BetaRand(double a, double b);
-int BinoRand(double p, int n);
+size_t BinoRand(double p, size_t n);
 
 void ResetSeed(void);
 void SetSeed(long new_ix, long new_iy, long new_iz);

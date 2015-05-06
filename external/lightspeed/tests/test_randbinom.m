@@ -32,5 +32,4 @@ else
     plot(x,f,x,g)
     legend('true','estimated')
   end
-
 end

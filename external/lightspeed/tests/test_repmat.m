@@ -17,7 +17,7 @@ end
 
 % run it once to load the definition
 repmat(1,1,1);
-if 0
+if 1
   %x = rand(300,1);
   x = rand(10,1);
   niter = floor(1000000/prod(size(x)));
@@ -31,17 +31,18 @@ if 0
 end
 
 if 0
-  fprintf('old repmat:');
-  tic; for i = 1:niter xrepmat(x',n,1); end; toc
-  fprintf('new repmat:');
-  tic; for i = 1:niter repmat(x',n,1); end; toc
+  tic; for i = 1:niter xrepmat(x',n,1); end; t0=toc;
+  fprintf('old repmat: %g\n',t0);
+  tic; for i = 1:niter repmat(x',n,1); end; t=toc;
+  fprintf('new repmat: %g (%g times faster)\n',t,t0/t);
 end
 
-if 0
-  fprintf('old repmat:');
-  tic; for i = 1:niter xrepmat(x,n,1); end; toc
-  fprintf('new repmat:');
-  tic; for i = 1:niter repmat(x,n,1); end; toc
+if 1
+	fprintf('repmat(rand(%g,%g),%g,1), %g times\n',rows(x),cols(x),n,niter);
+  tic; for i = 1:niter xrepmat(x,n,1); end; t0=toc;
+  fprintf('old repmat: %g\n',t0);
+  tic; for i = 1:niter repmat(x,n,1); end; t=toc;
+  fprintf('new repmat: %g (%g times faster)\n',t,t0/t);
 end
 
 if 0

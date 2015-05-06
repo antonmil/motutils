@@ -40,7 +40,7 @@ if isnumeric(v)
     v = v(:);
     for i = 1:prod(sz)
       index = substruct('()',num2cell(ind2subv(sz,i)));
-      subsasgn(jv,index,toJava(v(i)));
+      jv = subsasgn(jv,index,toJava(v(i)));
     end
   end
   return
@@ -65,7 +65,7 @@ if iscell(v)
     v = v(:);
     for i = 1:prod(sz)
       index = substruct('()',num2cell(ind2subv(sz,i)));
-      subsasgn(jv,index,toJava(v{i}));
+      jv = subsasgn(jv,index,toJava(v{i}));
     end
   end
   return

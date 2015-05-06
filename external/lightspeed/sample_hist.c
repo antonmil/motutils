@@ -12,7 +12,7 @@ void MultiRand(double *p, mwSize len, mwSize n, double *result)
   double z = 1;
   mwSize i;
   for(i=1;i<len;i++) {
-    int r = BinoRand(*p/z, n);
+    mwSize r = BinoRand(*p/z, n);
     *result++ = r;
     n -= r;
     z -= *p;
@@ -28,7 +28,7 @@ void MultiRand(double *p, mwSize len, mwSize n, double *result)
 void mexFunction(int nlhs, mxArray *plhs[],
 		 int nrhs, const mxArray *prhs[])
 {
-  mwSize rows, cols, n, i;
+  mwSize rows, cols, i, n;
   double *indata, *outdata;
 
   if(nrhs != 2)
@@ -44,7 +44,7 @@ void mexFunction(int nlhs, mxArray *plhs[],
   indata = mxGetPr(prhs[0]);
   if(mxGetNumberOfElements(prhs[1]) != 1)
     mexErrMsgTxt("n is not scalar");
-  n = (int)*mxGetPr(prhs[1]);
+  n = *mxGetPr(prhs[1]);
 
   if(mxIsSparse(prhs[0]))
     mexErrMsgTxt("Cannot handle sparse matrices.  Sorry.");

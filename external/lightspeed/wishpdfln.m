@@ -1,4 +1,4 @@
-function lp = wishpdfln(x,a,b,inverse)
+function lp = wishpdfln(X,a,B,inverse)
 %WISHPDFLN    Logarithm of Wishart probability density function.
 %  See WISHPDF for argument description.
 
@@ -22,7 +22,7 @@ else
   XB = X*B;
   logDetB = logdet(B);
 end
-d = rows(x);
+d = rows(X);
 d2 = (d+1)/2;
 if inverse
   d2 = -d2;

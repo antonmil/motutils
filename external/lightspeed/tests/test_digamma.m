@@ -15,7 +15,7 @@ for i = 1:rows(x)
 	expected = x(i,2);
 	e = abs(actual - expected)/expected;
 	if e > 1e-12
-		error(['digamma(' x(i,1) ') = ' actual ' should be ' expected])
+		error(sprintf('digamma(%g) = %g should be %g', x(i,1), actual, expected));
 	end
 end
 if digamma(-1) ~= -Inf

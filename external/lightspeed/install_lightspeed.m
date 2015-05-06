@@ -7,9 +7,12 @@
 % thanks to Kevin Murphy for suggesting this routine.
 % thanks to Ruben Martinez-Cantin for UNDERSCORE_LAPACK_CALL
 
-
-fprintf('Compiling lightspeed 2.6 mex files...\n');
-fprintf('Change directory to lightspeed for this to work.\n');
+% check that we are in the right directory
+d = dir('install_lightspeed.m');
+if length(d) == 0
+	error('You must run install_lightspeed from within the lightspeed directory.  Use cd to change the current directory.');
+end
+fprintf('Compiling lightspeed 2.7 mex files...\n');
 
 % Matlab version
 v = sscanf(version,'%d.%d.%*s (R%d) %*s');
@@ -20,6 +23,8 @@ atleast73 = (v(1)>7 || (v(1)==7 && v(2)>=3));
 atleast75 = (v(1)>7 || (v(1)==7 && v(2)>=5));
 atleast76 = (v(1)>7 || (v(1)==7 && v(2)>=6));
 atleast78 = (v(1)>7 || (v(1)==7 && v(2)>=8)); % R2009a
+atleast82 = (v(1)>8 || (v(1)==8 && v(2)>=2)); % R2013b
+atleast83 = (v(1)>8 || (v(1)==8 && v(2)>=3)); % R2014a
 if atleast73
 	% largeArrayDims and mwSize were added in version 7.3 (R2006b)
 	% http://www.mathworks.com/help/techdoc/rn/bqt6wtq.html
@@ -27,9 +32,13 @@ if atleast73
 else 
 	flags = ' -DmwSize=int -DmwIndex=int ';
 end
+if atleast83
+	flags = [flags ' -silent '];
+end
+replace_repmat = ~atleast82;
 
 % copy matlab's original repmat.m as xrepmat.m
-if exist('xrepmat.m') ~= 2
+if replace_repmat && exist('xrepmat.m') ~= 2
   w = fullfile(matlabroot,'toolbox','matlab','elmat','repmat.m');
   cmd = ['"' w '" xrepmat.m'];
   if ispc
@@ -47,7 +56,7 @@ eval(['mex' flags '-c mexutil.c']);
 eval(['mex' flags '-c util.c']);
 
 libdir = '';
-if ispc
+if ispc || atleast83
 	[compiler,options] = mexcompiler;
 	libdir = options.LIBLOC;
 	engmatopts = [compiler 'engmatopts.bat'];
@@ -112,6 +121,7 @@ if ispc
   %if exist('util.obj','file')
   eval(['mex' flags 'addflops.c flops.obj'])
 	if atleast78
+		[success,message] = mkdir('@double');
 		eval(['mex' flags 'gammaln.c util.obj -outdir @double'])
 	else
 		eval(['mex' flags 'gammaln.c util.obj'])
@@ -135,7 +145,11 @@ if ispc
     eval(['mex' flags 'randgamma.c mexutil.obj util.obj random.c'])
     eval(['mex' flags 'sample_hist.c util.obj random.c'])
   end
-  eval(['mex' flags 'repmat.c mexutil.obj'])
+	if replace_repmat
+		eval(['mex' flags 'repmat.c mexutil.obj'])
+	else
+		eval(['mex' flags 'repmat.c mexutil.obj -output xrepmat'])
+	end
   try
     % standalone programs
     % compilation instructions are described at:
@@ -159,6 +173,7 @@ else
   % UNIX
   eval(['mex' flags 'addflops.c flops.o'])
 	if atleast78
+		[success,message] = mkdir('@double');
 		eval(['mex' flags 'gammaln.c util.o -lm -outdir @double'])
 	else
 		eval(['mex' flags 'gammaln.c util.o -lm'])
@@ -188,7 +203,11 @@ else
     eval(['mex' flags 'randgamma.c mexutil.o util.o librandom.so -lm'])
     eval(['mex' flags 'sample_hist.c util.o librandom.so -lm'])
   end
-  eval(['mex' flags 'repmat.c mexutil.o'])
+	if replace_repmat
+		eval(['mex' flags 'repmat.c mexutil.o'])
+	else
+		eval(['mex' flags 'repmat.c mexutil.o -output xrepmat'])
+	end
   try
     % standalone programs
     if atleast78

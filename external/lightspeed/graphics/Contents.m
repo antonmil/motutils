@@ -7,6 +7,7 @@
 %   labeled_curves   - Draw multiple curves in different colors with labels.
 %   color_plot       - Scatterplot with colored points.
 %   hhist            - Locally-adaptive unbiased density estimate.
+%   hist2            - Two-dimensional histogram
 %   draw_circle      - Add circles to current plot.
 %   draw_ellipse     - Add ellipses to current plot.
 %   draw_ellipse_axes - Add ellipse major and minor axes to current plot.

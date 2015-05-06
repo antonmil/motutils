@@ -90,7 +90,7 @@ if strcmp(get(gca,'zscale'), 'log')
 end
 % clip for 2D
 ax = ax(1:length(axis));
-if ~isempty(children)
+if ~isempty(children) && all(isfinite(ax))
   axis(ax);
 end
 if nargout < 1

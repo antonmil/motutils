@@ -6,8 +6,8 @@
 #include <math.h>
 #include <stdlib.h>
 #include <float.h>
-#include "util.h"
 #include "mex.h"
+#include "util.h"
 
 #ifdef _MSC_VER
 #define finite _finite
@@ -21,16 +21,20 @@
 #ifdef	 __USE_ISOC99
 /* INFINITY and NAN are defined by the ISO C99 standard */
 #else
+#ifndef INFINITY
 double my_infinity(void) {
   double zero = 0;
   return 1.0/zero;
 }
+#define INFINITY my_infinity()
+#endif
+#ifndef NAN
 double my_nan(void) {
   double zero = 0;
   return zero/zero;
 }
-#define INFINITY my_infinity()
 #define NAN my_nan()
+#endif
 #endif
 
 /****************************************************************************/

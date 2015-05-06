@@ -52,4 +52,4 @@ elseif strcmp(cl,'java.util.Vector') | strcmp(cl,'java.util.BitSet')
   error('Index exceeds matrix dimensions.');
 end
 % use built-in subsasgn
-subsasgn(jv,index,toJava(v));
+jv = subsasgn(jv,index,toJava(v));

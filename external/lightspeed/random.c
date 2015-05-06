@@ -6,7 +6,9 @@
 
 #ifdef _MSC_VER
 #define finite _finite
+#ifndef isnan
 #define isnan _isnan
+#endif
 #endif
 
 /* Sharing a data segment in a DLL:
@@ -197,15 +199,15 @@ double BetaRand(double a, double b)
 /* Very fast binomial sampler. 
  * Returns the number of successes out of n trials, with success probability p.
  */
-int BinoRand(double p, int n)
+size_t BinoRand(double p, size_t n)
 {
-  int r = 0;
+  size_t r = 0;
   if(isnan(p)) return 0;
   if(p < DBL_EPSILON) return 0;
   if(p >= 1-DBL_EPSILON) return n;
   if((p > 0.5) && (n < 15)) {
     /* Coin flip method. This takes O(n) time. */
-    int i;
+    size_t i;
     for(i=0;i<n;i++) {
       if(Rand() < p) r++;
     }
@@ -225,7 +227,7 @@ int BinoRand(double p, int n)
   }
   if (1) {
     /* Recursive method.  This makes O(log(log(n))) recursive calls. */
-    int i = (int)(p*(n+1));
+	  size_t i = (size_t)(p*(n+1));
     double b = BetaRand(i, n+1-i);
     if(b <= p) r = i + BinoRand((p-b)/(1-b), n-i);
     else r = i - 1 - BinoRand((b-p)/b, i-1);

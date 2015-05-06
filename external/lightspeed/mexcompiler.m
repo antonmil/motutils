@@ -9,6 +9,10 @@ options.vcvarsopts = '';
 if ispc
 	mexopts = fullfile(prefdir,'mexopts.bat');
 	if ~exist(mexopts,'file')
+		try
+			[compiler,options] = getcc;
+		catch
+		end
 		return
 	end
 	fid = fopen(mexopts);
@@ -44,6 +48,10 @@ if ispc
 else
 	mexopts = fullfile(prefdir,'mexopts.sh');
 	if ~exist(mexopts,'file')
+		try
+			[compiler,options] = getcc;
+		catch
+		end
 		return
 	end
 	fid = fopen(mexopts);
@@ -64,4 +72,27 @@ else
 		end
 	end
 	fclose(fid);
+end
+
+
+function [compiler,options] = getcc
+
+% C:\Program Files\MATLAB\R2014a\help\matlab\ref\mex.getcompilerconfigurations.html
+cc = mex.getCompilerConfigurations('c','selected');
+compiler = cc.ShortName;
+options = struct;
+options.COMPILER = cc.Details.CompilerExecutable;
+options.COMPFLAGS = cc.Details.CompilerFlags;
+options.OPTIMFLAGS = cc.Details.OptimizationFlags;
+arch = computer('arch');
+options.LIBLOC = fullfile(matlabroot,'extern','lib',arch,cc.Manufacturer);
+vsinstalldir = cc.Location;
+options.VSINSTALLDIR = vsinstalldir;
+if ispc && ~isempty(strmatch(':\Program Files (x86)\',vsinstalldir(2:end)))
+	% http://msdn.microsoft.com/en-us/library/x4d2c09s(VS.80).aspx
+	if exist(fullfile(vsinstalldir,'VC','bin','x86_amd64','cl.exe'))
+		options.vcvarsopts = 'x86_amd64';
+	else
+		options.vcvarsopts = 'x86';
+	end
 end

@@ -1,6 +1,6 @@
 % Lightspeed Toolbox.  
 % Efficient operations for Matlab programming.
-% Version 2.6   05-May-2011
+% Version 2.7   03-Oct-2014
 % By Tom Minka
 % (c) Microsoft Corporation. All rights reserved. 
 %
