@@ -103,6 +103,9 @@ switch(scenario)
         dataset='KITTI';
     case intersect(scenario,901:917)
         dataset='UrbanStreet';
+    case intersect(scenario,1001:1099)
+        dataset='2DMOT2015';
+        
     otherwise
         error('unknown scenario');
 end
@@ -207,6 +210,50 @@ switch(scenario)
         seqname=sprintf('%04d',scenario-1800);
     case intersect(scenario,1850:1899);
         seqname=sprintf('%04d',scenario-1850);
+    case 1001
+        seqname='TUD-Stadtmitte';
+    case 1002
+        seqname='TUD-Campus';
+    case 1003
+        seqname='PETS09-S2L1';
+    case 1004
+        seqname='ETH-Bahnhof';
+    case 1005
+        seqname='ETH-Sunnyday';
+    case 1006
+        seqname='ETH-Pedcross2';
+    case 1007
+        seqname='ADL-Rundle-6';
+    case 1008
+        seqname='ADL-Rundle-8';
+    case 1009
+        seqname='KITTI-13';
+    case 1010
+        seqname='KITTI-17';
+    case 1011
+        seqname='Venice-2';
+    case 1051
+        seqname='TUD-Crossing';
+    case 1052
+        seqname='PETS09-S2L2';
+    case 1053
+        seqname='ETH-Jelmoli';
+    case 1054
+        seqname='ETH-Linthescher';
+    case 1055
+        seqname='ETH-Crossing';
+    case 1056
+        seqname='AVG-TownCentre';
+    case 1057
+        seqname='ADL-Rundle-1';
+    case 1058
+        seqname='ADL-Rundle-3';
+    case 1059
+        seqname='KITTI-16';
+    case 1060
+        seqname='KITTI-19';
+    case 1061
+        seqname='Venice-1';
 
         
     otherwise
@@ -384,30 +431,9 @@ switch(scenario)
     case 401
         sceneInfo.frameNums=1:143;
     otherwise
-        warning('unknown scenario getFrameNums. Will guess from imgFolder.');
+        fprintf('INFO: unknown scenario getFrameNums. Will guess from imgFolder.');
 end
 
-%% frame rate
-sceneInfo.frameRate=25;
-switch(scenario)
-    case {22,23,25,27,70,71,72,73,80,24,26,101,102,103,104,105,111,112,113,114,115,423,425} % PETS
-        sceneInfo.frameRate=7;
-    case {51,53} % ETH-Bahnhof and ETH-Sunnyday
-        sceneInfo.frameRate=14;
-    case 97
-        sceneInfo.frameRate=10;
-    case {191,192,193,194}
-        sceneInfo.frameRate=10;
-    case {195,196,197,198,199}
-        sceneInfo.frameRate=30;
-    case intersect(scenario,301:399)
-        sceneInfo.frameRate=2;
-    case intersect(scenario,500:899) % KITTI
-        sceneInfo.frameRate=10;
-    case intersect(scenario,1500:1899) % KITTI
-        sceneInfo.frameRate=10;
-
-end
 %%
 
 detfolder=fullfile(homefolder,'diss','detections','hog-hof-linsvm',dataset,seqname);
@@ -572,27 +598,15 @@ switch(scenario)
         sceneInfo.detfile=fullfile(dbfolder,dataset,'tracking','training','det_02','regionlets',sprintf('%04d.mat',scenario-1800));
     case intersect(scenario,1850:1899)
         sceneInfo.detfile=fullfile(dbfolder,dataset,'tracking','testing','det_02','regionlets',sprintf('%04d.mat',scenario-1850));
+    case intersect(scenario,1001:1011)
+        sceneInfo.detfile=fullfile(dbfolder,dataset,'train',seqname,'det','det.txt');
+    case intersect(scenario,1051:1061)
+        sceneInfo.detfile=fullfile(dbfolder,dataset,'test',seqname,'det','det.txt');
+
     otherwise
         sceneInfo.detfile=fullfile(detfolder,[seqname sprintf('-result-00000-%05d-nms.idl',length(sceneInfo.frameNums)-1)]);
 end
 
-% TEMP PRML
-if scenario>=301 && scenario<=399
-    [pathstr, filename, ~]=fileparts(sceneInfo.detfile);
-%     addpath('d:\prml\irtracking');
-%     tmpdet=readData([pathstr filesep filename '.txt']);
-%     tmpdet=load('d:\prml\irtracking\data\antonsynth.txt');
-%     size(tmpdet)
-    xDoc=xmlread(sceneInfo.detfile);
-    allFrames=xDoc.getElementsByTagName('frame');    
-    sceneInfo.frameNums=1:allFrames.getLength;
-end
-% sceneInfo.frameNums
-% pause
-% if scenario==41
-%     sceneInfo.detfile=TUDDet;
-%     
-% end
 
 fprintf('Detections file: %s\n',sceneInfo.detfile)
 assert(exist(sceneInfo.detfile,'file')==2,'detection file %s does not exist',sceneInfo.detfile)
@@ -664,6 +678,11 @@ switch(scenario)
         sceneInfo.imgFolder=fullfile(dbfolder,dataset,'tracking','testing','image_02',seqname,filesep);
     case intersect(scenario,900:917)
         sceneInfo.imgFolder=fullfile(dbfolder,dataset,'Data',seqname,'images_left',filesep);
+    case intersect(scenario,1001:1011)
+        sceneInfo.imgFolder=fullfile(dbfolder,dataset,'train',seqname,'img1',filesep);
+    case intersect(scenario,1051:1061)
+        sceneInfo.imgFolder=fullfile(dbfolder,dataset,'test',seqname,'img1',filesep);
+        
     otherwise
         error('unknown scenario image Folder');
 end
@@ -685,8 +704,11 @@ switch(scenario)
         imgExt='.png';
     case intersect(scenario,500:899) % KITTI
         imgExt='.png';        
-    case intersect(scenario,1500:1899) % KITTI
-        imgExt='.png';        
+    case intersect(scenario,1500:1899) % KITTI        
+        imgExt='.png';
+    case intersect(scenario,1001:1099)
+        imgExt='.jpg';
+        
 end
 
 % sceneInfo.imgFileFormat='frame_%04d';
@@ -716,6 +738,9 @@ switch(scenario)
         sceneInfo.imgFileFormat='%06d';
     case intersect(scenario,1500:1899) % KITTI Regionlets
         sceneInfo.imgFileFormat='%06d';
+    case intersect(scenario,1001:1099)  % 2D MOT
+        sceneInfo.imgFileFormat='%06d';
+        
 end
 if isempty(sceneInfo.imgFileFormat) || isempty(imgExt) || ~isfield(sceneInfo,'frameNums')
     [sceneInfo.imgFileFormat, imgExt, sceneInfo.frameNums] = getImgFormat(sceneInfo.imgFolder, imgExt);
@@ -736,6 +761,31 @@ end
     size(imread([sceneInfo.imgFolder sprintf(sceneInfo.imgFileFormat,sceneInfo.frameNums(1))]));
 
 
+%% frame rate
+sceneInfo.frameRate=25;
+switch(scenario)
+    case {22,23,25,27,70,71,72,73,80,24,26,101,102,103,104,105,111,112,113,114,115,423,425} % PETS
+        sceneInfo.frameRate=7;
+    case {51,53} % ETH-Bahnhof and ETH-Sunnyday
+        sceneInfo.frameRate=14;
+    case 95
+        sceneInfo.frameRate=2.5; % towncentre low FPS
+    case 97
+        sceneInfo.frameRate=10;
+    case {191,192,193,194}
+        sceneInfo.frameRate=10;
+    case {195,196,197,198,199}
+        sceneInfo.frameRate=30;
+    case intersect(scenario,301:399)
+        sceneInfo.frameRate=2;
+    case intersect(scenario,500:799) % KITTI
+        sceneInfo.frameRate=10;
+end
+
+%% look for framerate.txt
+if exist(fullfile(sceneInfo.imgFolder,'..','framerate.txt'),'file')
+    sceneInfo.frameRate = dlmread(fullfile(sceneInfo.imgFolder,'..','framerate.txt'));
+end
 
 
 %% tracking area
@@ -816,7 +866,7 @@ cameraconffile=[];
         case intersect(scenario,301:399)
             cameraconffile=fullfile(homefolder,'research','projects','irtracking','data','cam.xml');    
         otherwise
-            warning('Camera calibration not defined');
+            fprintf('INFO: Camera calibration not defined\n');
     end
 % end
 sceneInfo.camFile=cameraconffile;
@@ -951,6 +1001,8 @@ switch(scenario)
         sceneInfo.gtFile=fullfile(dbfolder,dataset,'tracking','training','label_02',[seqname '-peds.mat']);
     case intersect(scenario,1800:1849) % KITTI Cars+Peds Regionlets
         sceneInfo.gtFile=fullfile(dbfolder,dataset,'tracking','training','label_02',[seqname '.mat']);
+    case intersect(scenario,1001:1011)
+        sceneInfo.gtFile=fullfile(dbfolder,dataset,'train',seqname,'gt','gt.txt');        
         
     otherwise
         warning('ground truth?');
@@ -967,6 +1019,22 @@ if ~isempty(sceneInfo.gtFile)
     
     if strcmpi(fileext,'.xml') % CVML
         gtInfo=parseGT(sceneInfo.gtFile);
+    elseif strcmpi(fileext,'.txt') % Benchmark        
+        gtInfo=convertTXTToStruct(sceneInfo.gtFile);
+        Fgt=length(sceneInfo.frameNums);
+        FE=size(gtInfo.W,1);
+        % if stateInfo shorter, pad with zeros
+        if FE<Fgt
+            missingFrames = FE+1:Fgt;
+            gtInfo.Xi(missingFrames,:)=0;
+            gtInfo.Yi(missingFrames,:)=0;
+            gtInfo.W(missingFrames,:)=0;
+            gtInfo.H(missingFrames,:)=0;
+			gtInfo.X(missingFrames,:)=0;
+			gtInfo.Y(missingFrames,:)=0;
+        end
+        gtInfo.frameNums=sceneInfo.frameNums;
+        
     elseif strcmpi(fileext,'.mat')
         % check for the var gtInfo
         fileInfo=who('-file',sceneInfo.gtFile);
