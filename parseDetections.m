@@ -215,6 +215,9 @@ elseif detFileType==3
     sceneInfo.yshift=0;
     F=max(detRaw(:,1));
     
+    [~,imExt]=strtok(sceneInfo.imgFileFormat,'.');
+    F=length(dir([sceneInfo.imgFolder,filesep,'*',imExt]));
+    
     
     for t=1:F
         detections(t).bx=[];
