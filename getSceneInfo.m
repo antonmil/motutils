@@ -798,7 +798,7 @@ if opt.track3d
     switch(scenario)
         case {20,21}
             sceneInfo.trackingArea=[-2000 6000 0 9000];
-        case {22,23,25,27,70,71,72,73,80,24,26,101,102,103,104,105,111,112,113,114,115,423,425}
+        case {22,23,25,27,70,71,72,73,80,24,26,101,102,103,104,105,111,112,113,114,115,423,425,1003,1052}
             sceneInfo.trackingArea=[-14069.6, 4981.3, -14274.0, 1733.5];
         case {30,31,32}
             sceneInfo.trackingArea=[-197    6708   -2021    6870];
@@ -808,7 +808,7 @@ if opt.track3d
             sceneInfo.trackingArea=[-0150 0506   28   1081];
         case 41
             sceneInfo.trackingArea=[-19, 12939, -48, 10053];
-        case {42,43}
+        case {42,43,1001}
             sceneInfo.trackingArea=[-19, 12939, -48, 10053];
         case 51 % ETH Bahnhof
             sceneInfo.trackingArea=[-10000 10000 -500 120000];
@@ -898,6 +898,8 @@ if opt.track3d && ~isempty(intersect(scenario,301:399)), sceneInfo.targetSize=15
 
 if scenario>=600 && scenario<621, sceneInfo.targetSize=50; end % KITTI all victor
 
+if scenario>=1001 && scenario<1099, sceneInfo=rmfield(sceneInfo,'targetSize'); % MOTChallenge
+
 %% target aspect ratio
 sceneInfo.targetAR=1/3;
 switch(scenario)
@@ -920,6 +922,8 @@ switch(scenario)
     case intersect(scenario,1500:1899) % KITTI Regionlets
         sceneInfo=rmfield(sceneInfo,'targetAR');
     case intersect(scenario,600:620) % KITTI Victor
+        sceneInfo=rmfield(sceneInfo,'targetAR');
+    case intersect(scenario,1001:1099) % MOTChallenge
         sceneInfo=rmfield(sceneInfo,'targetAR');
 end
 
