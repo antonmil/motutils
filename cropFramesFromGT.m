@@ -3,6 +3,7 @@ function gtInfo=cropFramesFromGT(sceneInfo,gtInfo,frames,opt)
 % 
 
 % global scenario;
+if isfield(sceneInfo,'gtAvailable')
 if sceneInfo.gtAvailable
     
     
@@ -30,5 +31,5 @@ if sceneInfo.gtAvailable
         gtInfo.dirx=gtInfo.dirx(frkeep,:);gtInfo.diry=gtInfo.diry(frkeep,:);
     end
 
-
+end
 end
