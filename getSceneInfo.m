@@ -898,7 +898,7 @@ if opt.track3d && ~isempty(intersect(scenario,301:399)), sceneInfo.targetSize=15
 
 if scenario>=600 && scenario<621, sceneInfo.targetSize=50; end % KITTI all victor
 
-if scenario>=1001 && scenario<1099, sceneInfo=rmfield(sceneInfo,'targetSize'); % MOTChallenge
+if scenario>=1001 && scenario<1099, sceneInfo=rmfield(sceneInfo,'targetSize'); end % MOTChallenge
 
 %% target aspect ratio
 sceneInfo.targetAR=1/3;

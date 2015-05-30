@@ -10,7 +10,7 @@ detfile=sceneInfo.detfile;
 [pathstr, filename, fileext]=fileparts(detfile);
 % is there a .mat file available?
 matfile=fullfile(pathstr,[filename '.mat']);
-if 0 && exist(matfile,'file')
+if ~strcmpi(fileext,'.txt') && exist(matfile,'file')
     load(matfile,'detections')
     detections=setDetectionPositions(detections,opt,sceneInfo);
     
