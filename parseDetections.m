@@ -241,6 +241,7 @@ elseif detFileType==3
         xi=detRaw(d,3)+w/2;
         yi=detRaw(d,4)+h;
         sc=detRaw(d,7);
+        sc=(sc-min(detRaw(:,7))) / (max(detRaw(:,7)-min(detRaw(:,7))));
         
         detections(t).bx=[detections(t).bx bx];
         detections(t).by=[detections(t).by by];
@@ -256,10 +257,10 @@ elseif detFileType==3
         % if scores not between 0 and 1
         % apply sigmoid (kinda hacky)
         if min([detections(:).sc]) < 0 || max([detections(:).sc]) > 1
-            fprintf('applying sigmoid transform to det conf.\n');
-            for t=1:F
-                detections(t).sc = 1./(1+exp(-detections(t).sc));
-            end
+%             fprintf('applying sigmoid transform to det conf.\n');
+%             for t=1:F
+%                 detections(t).sc = 1./(1+exp(-detections(t).sc));
+%             end
             
         end
         

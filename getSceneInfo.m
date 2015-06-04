@@ -33,6 +33,13 @@ end
 %   scenario        sequence number
 %   imgFileFormat   format for images (eg. frame_%04d.jpg)
 
+%% shift trick for ACF
+oscen=scenario;
+if oscen>=2000 && oscen<2100
+    scenario=oscen-2000;
+elseif oscen>=2100 && oscen<2200
+    scenario=oscen-2100;
+end
 
 
 if nargin<2
@@ -1094,7 +1101,26 @@ switch(scenario)
     case {22,23,25,27,70,71,72,73,80,81,82,83,84,85,42,43,24,26,101,102,103,104,105,111,112,113,114,115,423,425}
         sceneInfo.bgMask=fullfile(dbfolder,dataset,'bgmask.mat');
 end
+%  adjust ACF det
+%% detfile
+if oscen>=2000 && oscen<2100
+    sceneInfo.detfile=[sceneInfo.detfile,'-acf.txt'];
+    fprintf('New Detections file: %s\n',sceneInfo.detfile)
+    assert(exist(sceneInfo.detfile,'file')==2,'detection file %s does not exist',sceneInfo.detfile)
+elseif oscen>=2100 && oscen<2200
+    sceneInfo.detfile=[sceneInfo.detfile,'-acf-raw.txt'];
+
+    fprintf('New Detections file: %s\n',sceneInfo.detfile)
+    assert(exist(sceneInfo.detfile,'file')==2,'detection file %s does not exist',sceneInfo.detfile)    
+end
+
+
+% backshift
+
+
+scenario=oscen;
 
 sceneInfo.scenario=scenario;
+
 
 end
