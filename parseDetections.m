@@ -209,7 +209,9 @@ elseif detFileType==2
     end
 elseif detFileType==3
     
-    if ~exist(matfile)
+    fprintf('Looking for matfile %s...\n',matfile);
+    if ~exist(matfile,'file')
+        fprintf('mat file note found: %s! compute ...\n',matfile);
     detRaw=dlmread(sceneInfo.detfile);
     
     sceneInfo.targetSize = mean(detRaw(:,5))/2;
@@ -266,7 +268,9 @@ elseif detFileType==3
         end
         
     else
+        fprintf('mat file found: %s! loading...\n',matfile);
         load(matfile);
+
     end
         
     if nargin>1
@@ -284,8 +288,10 @@ detections=projectToGP(detections,sceneInfo);
 detections=setDetectionPositions(detections,opt,sceneInfo);
 
 
-% save detections in a .mat file
+% save detections in a .mat file only if full sequence
+if nargin<1
 save(matfile,'detections');
+end
 
 end
 
