@@ -209,6 +209,7 @@ elseif detFileType==2
     end
 elseif detFileType==3
     
+    if ~exist(matfile)
     detRaw=dlmread(sceneInfo.detfile);
     
     sceneInfo.targetSize = mean(detRaw(:,5))/2;
@@ -263,6 +264,10 @@ elseif detFileType==3
 %             end
             
         end
+        
+    else
+        load(matfile);
+    end
         
     if nargin>1
         detections=detections(frames);

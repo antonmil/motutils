@@ -1,7 +1,10 @@
-function [Xi Yi]=projectToImage(X,Y,sceneInfo)
+function [Xi Yi]=projectToImage(X,Y,sceneInfo,Z)
 % project all points from ground plane to image
 
-Z=zeros(size(X));
+if nargin<4
+    Z=zeros(size(X));
+end
+
 camPar=sceneInfo.camPar;
 
 if length(camPar)==1
