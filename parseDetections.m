@@ -290,7 +290,7 @@ detections=setDetectionPositions(detections,opt,sceneInfo);
 
 % save detections in a .mat file only if full sequence
 if nargin<1
-save(matfile,'detections');
+% save(matfile,'detections');
 end
 
 end
