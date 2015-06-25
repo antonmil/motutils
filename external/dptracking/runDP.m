@@ -75,15 +75,15 @@ end
 
 display('in DP tracking ...')
 tic
-dres_dp       = tracking_dp(dres, c_en, c_ex, c_ij, betta, thr_cost, max_it, 0);
-dres_dp.r     = -dres_dp.id;
+% dres_dp       = tracking_dp(dres, c_en, c_ex, c_ij, betta, thr_cost, max_it, 0);
+% dres_dp.r     = -dres_dp.id;
 toc
 
-% tic
-% display('in DP tracking with nms in the loop...')
-% dres_dp_nms   = tracking_dp(dres, c_en, c_ex, c_ij, betta, thr_cost, max_it, 1);
-% dres_dp_nms.r = -dres_dp_nms.id;
-% toc
+tic
+display('in DP tracking with nms in the loop...')
+dres_dp_nms   = tracking_dp(dres, c_en, c_ex, c_ij, betta, thr_cost, max_it, 1);
+dres_dp_nms.r = -dres_dp_nms.id;
+toc
 
 % tic
 % display('in push relabel algorithm ...')
@@ -98,7 +98,7 @@ toc
 
 %%
 fnum = max(dres.fr);
-bboxes_tracked = dres2bboxes(dres_dp, fnum);  %% we are visualizing the "DP with NMS in the lop" results. Can be changed to show the results of DP or push relabel algorithm.
+bboxes_tracked = dres2bboxes(dres_dp_nms, fnum);  %% we are visualizing the "DP with NMS in the lop" results. Can be changed to show the results of DP or push relabel algorithm.
 % quick hack
 % if scenario==72
 %     bboxes_tracked(201).bbox=[];
