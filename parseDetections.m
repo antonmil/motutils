@@ -244,7 +244,9 @@ elseif detFileType==3
         xi=detRaw(d,3)+w/2;
         yi=detRaw(d,4)+h;
         sc=detRaw(d,7);
-        sc=(sc-min(detRaw(:,7))) / (max(detRaw(:,7)-min(detRaw(:,7))));
+        if max(detRaw(:,7)-min(detRaw(:,7))) ~= 0
+            sc=(sc-min(detRaw(:,7))) / (max(detRaw(:,7)-min(detRaw(:,7))));
+        end
         
         detections(t).bx=[detections(t).bx bx];
         detections(t).by=[detections(t).by by];

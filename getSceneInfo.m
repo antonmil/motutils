@@ -33,12 +33,14 @@ end
 %   scenario        sequence number
 %   imgFileFormat   format for images (eg. frame_%04d.jpg)
 
-%% shift trick for ACF
+%% shift trick for ACF / GT
 oscen=scenario;
 if oscen>=2000 && oscen<2100
     scenario=oscen-2000;
 elseif oscen>=2100 && oscen<2200
     scenario=oscen-2100;
+elseif oscen>=2200 && oscen<2300 % GT
+    scenario=oscen-2200;
 end
 
 
@@ -1109,9 +1111,14 @@ if oscen>=2000 && oscen<2100
     assert(exist(sceneInfo.detfile,'file')==2,'detection file %s does not exist',sceneInfo.detfile)
 elseif oscen>=2100 && oscen<2200
     sceneInfo.detfile=[sceneInfo.detfile,'-acf-raw.txt'];
-
+    
     fprintf('New Detections file: %s\n',sceneInfo.detfile)
     assert(exist(sceneInfo.detfile,'file')==2,'detection file %s does not exist',sceneInfo.detfile)    
+elseif oscen>=2200 && oscen<2300
+    sceneInfo.detfile=[sceneInfo.detfile,'-gt.txt'];
+    
+    fprintf('New Detections file: %s\n',sceneInfo.detfile)
+    assert(exist(sceneInfo.detfile,'file')==2,'detection file %s does not exist',sceneInfo.detfile)        
 end
 
 
