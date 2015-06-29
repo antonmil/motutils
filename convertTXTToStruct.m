@@ -66,6 +66,7 @@ for l=1:numLines
         end
     end
 end
+stInfo.frameNums = unique(allData(:,1))';
 
 % append empty frames?
 if nargin>1
