@@ -233,31 +233,62 @@ elseif detFileType==3
         detections(t).ht=[];
         detections(t).sc=[];
     end
+%     dets2=detections;
     
-    for d=1:size(detRaw,1)
-        t=detRaw(d,1);
+%     for d=1:size(detRaw,1)
+%         t=detRaw(d,1);
+%         
+%         w=detRaw(d,5);
+%         h=detRaw(d,6);
+%         bx=detRaw(d,3);
+%         by=detRaw(d,4);
+%         xi=detRaw(d,3)+w/2;
+%         yi=detRaw(d,4)+h;
+%         sc=detRaw(d,7);
+%         if max(detRaw(:,7)-min(detRaw(:,7))) ~= 0
+% %             sc=(sc-min(detRaw(:,7))) / (max(detRaw(:,7)-min(detRaw(:,7))));
+%         end
+%         
+%         detections(t).bx=[detections(t).bx bx];
+%         detections(t).by=[detections(t).by by];
+%         detections(t).xi=[detections(t).xi xi];
+%         detections(t).yi=[detections(t).yi yi];
+%         detections(t).xp=[detections(t).xp xi];
+%         detections(t).yp=[detections(t).yp yi];
+%         detections(t).wd=[detections(t).wd w];
+%         detections(t).ht=[detections(t).ht h];
+%         detections(t).sc=[detections(t).sc sc];
+%     end        
+    
+    % faster matrix operations
+    
+    for t=1:F
+        % all dets in current frame
+        inF = find(detRaw(:,1)==t);
         
-        w=detRaw(d,5);
-        h=detRaw(d,6);
-        bx=detRaw(d,3);
-        by=detRaw(d,4);
-        xi=detRaw(d,3)+w/2;
-        yi=detRaw(d,4)+h;
-        sc=detRaw(d,7);
+        w=detRaw(inF,5);
+        h=detRaw(inF,6);
+        bx=detRaw(inF,3);
+        by=detRaw(inF,4);
+        xi=detRaw(inF,3)+w/2;
+        yi=detRaw(inF,4)+h;
+        sc=detRaw(inF,7);
         if max(detRaw(:,7)-min(detRaw(:,7))) ~= 0
 %             sc=(sc-min(detRaw(:,7))) / (max(detRaw(:,7)-min(detRaw(:,7))));
         end
         
-        detections(t).bx=[detections(t).bx bx];
-        detections(t).by=[detections(t).by by];
-        detections(t).xi=[detections(t).xi xi];
-        detections(t).yi=[detections(t).yi yi];
-        detections(t).xp=[detections(t).xp xi];
-        detections(t).yp=[detections(t).yp yi];
-        detections(t).wd=[detections(t).wd w];
-        detections(t).ht=[detections(t).ht h];
-        detections(t).sc=[detections(t).sc sc];
-    end        
+        detections(t).bx=bx';
+        detections(t).by=by';
+        detections(t).xi=xi';
+        detections(t).yi=yi';
+        detections(t).xp=xi';
+        detections(t).yp=yi';
+        detections(t).wd=w';
+        detections(t).ht=h';
+        detections(t).sc=sc';
+        
+    end
+%     assert(isequal(dets2,detections));
     
         % if scores not between 0 and 1
         % apply sigmoid (kinda hacky)

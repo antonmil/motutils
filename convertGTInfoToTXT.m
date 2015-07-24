@@ -1,4 +1,4 @@
-function convertGTInfoToTXT(gtInfo, txtFile)
+function allData=convertGTInfoToTXT(gtInfo, txtFile)
 % convert Anton's struct format to simple CSV file
 
 
@@ -35,5 +35,6 @@ end
 
 allData = [fr, id, bx, by, wd, ht, scores,X,Y,Z];
 
-
-dlmwrite(txtFile,allData);
+if nargin>1
+    dlmwrite(txtFile,allData);
+end
