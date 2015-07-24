@@ -342,7 +342,7 @@ function detections=projectToGP(detections,sceneInfo)
         muh=1.7; sigmah=.7; factorh=1/sigmah/sqrt(2*pi);
 
         [mR mT]=getRotTrans(sceneInfo.camPar);
-
+        fprintf('projecting to ground plane');
         for t=1:length(detections)
             if ~mod(t,10), fprintf('.'); end
 %             figure(1)
@@ -498,6 +498,7 @@ function detections=projectToGP(detections,sceneInfo)
 %             end
 %             pause
         end
+        fprintf('done\n');
     end
 end
 
