@@ -40,14 +40,16 @@ if isempty(dirlisting)
 end
 
 % grab first file name without extension
-fname=strsplit(dirlisting(1).name,'.');
-fname=char(fname{1});
-
+% fname=strsplit(dirlisting(1).name,'.');
+% fname=char(fname{1});
+[fp, fname, fext] = fileparts(dirlisting(1).name);
+fname
 
 staticchar=true(1,length(fname));
 for f=2:length(dirlisting)
-    fname2=strsplit(dirlisting(f).name,'.');
-    fname2=char(fname2{1});
+    % fname2=strsplit(dirlisting(f).name,'.');
+    % fname2=char(fname2{1});
+	[fp, fname2, fext] = fileparts(dirlisting(f).name);
     
     if length(fname)~=length(fname)
         error('image files do not have equal lengths');
@@ -98,10 +100,12 @@ imgExt=['.' ext];
 
 % determine frame numbers
 % first
-fname=strsplit(dirlisting(1).name,'.'); fname=char(fname{1});
+% fname=strsplit(dirlisting(1).name,'.'); fname=char(fname{1});
+[fp, fname, fext] = fileparts(dirlisting(1).name);
 ff=sscanf(fname,[prefix counterstring suffix]);
 % last
-fname=strsplit(dirlisting(end).name,'.'); fname=char(fname{1});
+% fname=strsplit(dirlisting(end).name,'.'); fname=char(fname{1});
+[fp, fname, fext] = fileparts(dirlisting(end).name);
 lf=sscanf(fname,[prefix counterstring suffix]);
 frameNums=ff:lf;
 fprintf('sequence runs from frame %d to frame %d (%d frames)\n',ff,lf,length(frameNums));

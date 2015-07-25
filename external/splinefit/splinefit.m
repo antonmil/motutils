@@ -1014,7 +1014,7 @@ slopepen=sp*sum(((sps-1000).^2));
 % slopepen=slopepen+sp*min(((sps-1000).^2));
 
 if ~opt.track3d
-    if sceneInfo.scenario==51 || sceneInfo.scenario==53
+    if sceneInfo.scenario==51 || sceneInfo.scenario==53  || (sceneInfo.scenario>=1000 && sceneInfo.scenario<=1099)
     ypos=ppval(pp,linspace(xpt(1),xpt(end),length(xpt)));
     ypos=ypos(2,:);
     spc=spc .* ( 1./abs(ypos-200));

@@ -751,6 +751,8 @@ switch(scenario)
         sceneInfo.imgFileFormat='%06d';
         
 end
+sceneInfo.imgFolder
+imgExt
 if isempty(sceneInfo.imgFileFormat) || isempty(imgExt) || ~isfield(sceneInfo,'frameNums')
     [sceneInfo.imgFileFormat, imgExt, sceneInfo.frameNums] = getImgFormat(sceneInfo.imgFolder, imgExt);
 end
